@@ -1,6 +1,5 @@
 package com.morena.netMain.auth.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 

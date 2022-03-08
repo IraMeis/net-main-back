@@ -3,8 +3,6 @@ package com.morena.netMain.auth.model;
 import com.morena.netMain.logic.entity.DictRoles;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RoleMapper {

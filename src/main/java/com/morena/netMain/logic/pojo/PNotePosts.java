@@ -18,6 +18,6 @@ public class PNotePosts {
     private Boolean isDeleted;
 
     private String content;
-    private String head;
+    private String header;
     private Pair scope;
 }

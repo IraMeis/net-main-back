@@ -30,7 +30,7 @@ values (1, 1),
        (5, 3);
 
 update sys_users set scope_type=1 where login in ('system', 'admin', 'morena');
-update sys_users set scope_type=3 where login ='erichkraft';
+update sys_users set scope_type=2 where login ='erichkraft';
 update sys_users set scope_type=4 where login ='noone';
 
 insert into note_posts (head, content, scope_type, created_timestamp)

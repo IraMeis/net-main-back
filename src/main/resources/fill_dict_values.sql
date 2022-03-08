@@ -16,3 +16,9 @@ VALUES (1, 'scope_private'),
        (2, 'scope_trusted'),
        (3, 'scope_viewers'),
        (4, 'scope_public');
+
+insert into dict_user_contacts (code, name, description)
+VALUES (1, 'email', 'почта'),
+       (2, 'phone', 'телефон'),
+       (3, 'telegram', 'tg id'),
+       (4, 'github', 'github username');

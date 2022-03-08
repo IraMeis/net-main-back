@@ -251,3 +251,165 @@ comment on column link_comment_reply_to.unique_id is 'Идентификатор
 comment on column link_comment_reply_to.comment_ref is 'Ссылка на комментарий';
 
 comment on column link_comment_reply_to.reply_to_ref is 'Ссылка на юзера';
+
+create table dict_user_contacts
+(
+    unique_id          bigserial
+        constraint dict_user_contacts_pkey
+            primary key,
+    uuid               uuid                     default uuid_generate_v4()    not null,
+    created_timestamp  timestamp with time zone default statement_timestamp() not null,
+    modified_timestamp timestamp with time zone default statement_timestamp() not null,
+    is_deleted         boolean                  default false,
+    name               varchar                                                not null,
+    code               bigint                                                 not null
+        constraint dict_user_contacts_code_key
+            unique,
+    description        varchar
+);
+
+comment on table dict_user_contacts is 'Таблица, содержащая атрибуты объекта - Контактные данные пользователя';
+
+comment on column dict_user_contacts.unique_id is 'Идентификатор записи. Первичный ключ';
+
+comment on column dict_user_contacts.uuid is 'uuid объекта';
+
+comment on column dict_user_contacts.created_timestamp is 'Дата и время создания записи';
+
+comment on column dict_user_contacts.modified_timestamp is 'Дата и время последнего изменения записи';
+
+comment on column dict_user_contacts.is_deleted is 'Признак удалённой записи';
+
+comment on column dict_user_contacts.name is 'Наименование';
+
+comment on column dict_user_contacts.code is 'Код записи';
+
+comment on column dict_user_contacts.description is 'Описание';
+
+create table sys_users_contacts
+(
+    unique_id  bigserial
+        constraint sys_users_contacts_pkey
+            primary key,
+    uuid               uuid                     default uuid_generate_v4()    not null,
+    created_timestamp  timestamp with time zone default statement_timestamp() not null,
+    modified_timestamp timestamp with time zone default statement_timestamp() not null,
+    is_deleted         boolean                  default false,
+    user_ref   bigint not null
+        constraint sys_users_contacts_user_ref_fkey
+            references sys_users
+            on update restrict on delete restrict,
+    contact_type   bigint not null
+        constraint sys_users_contacts_contact_type_fkey
+            references dict_user_contacts (code)
+            on update restrict on delete restrict,
+    content varchar not null
+);
+
+comment on table sys_users_contacts is 'Таблица связи пользователь-контакт';
+
+comment on column sys_users_contacts.unique_id is 'Идентификатор записи. Первичный ключ';
+
+comment on column sys_users_contacts.user_ref is 'Ссылка на пользователя';
+
+comment on column sys_users_contacts.contact_type is 'Ссылка на тип контакта';
+
+comment on column sys_users_contacts.is_deleted is 'Признак удалённой записи';
+
+comment on column sys_users_contacts.content is 'Значение контакта';
+
+comment on column sys_users_contacts.uuid is 'UUID записи';
+
+comment on column sys_users_contacts.created_timestamp is 'Дата и время создания записи';
+
+comment on column sys_users_contacts.modified_timestamp is 'Дата и время последнего изменения записи';
+
+create table link_comment_reply_to
+(
+    unique_id          bigserial
+        constraint link_comment_reply_to_pkey
+            primary key,
+    is_deleted         boolean                  default false,
+    comment_ref    bigint not null constraint link_comment_reply_to_comment_ref_fkey
+        references note_comments
+        on update restrict on delete restrict,
+    reply_to_ref    bigint not null constraint link_comment_reply_to_reply_to_ref_fkey
+        references sys_users
+        on update restrict on delete restrict
+);
+
+comment on table link_comment_reply_to is 'Таблица связи комментария и юзеров, которым ответчают в данном коментарии';
+
+comment on column link_comment_reply_to.unique_id is 'Идентификатор записи. Первичный ключ';
+
+comment on column link_comment_reply_to.is_deleted is 'Признак удалённой записи';
+
+comment on column link_comment_reply_to.comment_ref is 'Ссылка на комментарий';
+
+comment on column link_comment_reply_to.reply_to_ref is 'Ссылка на юзера';
+
+create table net_nets
+(
+    unique_id          bigserial
+        constraint net_nets_pkey
+            primary key,
+    uuid               uuid                     default uuid_generate_v4()    not null,
+    created_timestamp  timestamp with time zone default statement_timestamp() not null,
+    modified_timestamp timestamp with time zone default statement_timestamp() not null,
+    is_deleted         boolean                  default false,
+    description        varchar,
+    name               varchar   constraint net_nets_name_key unique        not null,
+    config             varchar                                                not null,
+    weigths_url        varchar
+);
+
+comment on table net_nets is 'Таблица, содержащая данные о модели нейронной сети';
+
+comment on column net_nets.unique_id is 'Идентификатор записи. Первичный ключ';
+
+comment on column net_nets.uuid is 'UUID записи';
+
+comment on column net_nets.created_timestamp is 'Дата и время создания записи';
+
+comment on column net_nets.modified_timestamp is 'Дата и время последнего изменения записи';
+
+comment on column net_nets.is_deleted is 'Признак удалённой записи';
+
+comment on column net_nets.description is 'Описание модели';
+
+comment on column net_nets.weigths_url is 'Ссылка на веса';
+
+comment on column net_nets.name is 'Название модели';
+
+comment on column net_nets.config is 'Кофигурация сети';
+
+create table net_runs
+(
+    unique_id          bigserial
+        constraint net_runs_pkey
+            primary key,
+    uuid               uuid                     default uuid_generate_v4()    not null,
+    created_timestamp  timestamp with time zone default statement_timestamp() not null,
+    modified_timestamp timestamp with time zone default statement_timestamp() not null,
+    is_deleted         boolean                  default false,
+    net_ref varchar not null constraint net_runs_net_ref_fkey
+        references net_nets (name)
+        on update restrict on delete restrict,
+    content            varchar                                                not null
+);
+
+comment on table net_runs is 'Таблица, содержащая данные о оценке нейронной сети';
+
+comment on column net_runs.unique_id is 'Идентификатор записи. Первичный ключ';
+
+comment on column net_runs.uuid is 'UUID записи';
+
+comment on column net_runs.created_timestamp is 'Дата и время создания записи';
+
+comment on column net_runs.modified_timestamp is 'Дата и время последнего изменения записи';
+
+comment on column net_runs.is_deleted is 'Признак удалённой записи';
+
+comment on column net_runs.content is 'Объект evaluation';
+
+comment on column net_runs.net_ref is 'Ссылка на модель';

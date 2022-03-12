@@ -3,10 +3,7 @@ package com.morena.netMain.auth.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.entity.base.BaseModelEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -20,6 +17,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class SysTokens extends BaseModelEntity {
 
     @Column(name = "content")

@@ -4,6 +4,7 @@ import com.morena.netMain.logic.entity.base.BaseModelDictionaryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,5 +14,6 @@ import javax.persistence.Table;
 @Data
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class DictScopes extends BaseModelDictionaryEntity {
 }

@@ -10,14 +10,16 @@ import com.morena.netMain.logic.repository.NotePostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.morena.netMain.auth.model.Role.*;
 
 @Service
 @RequiredArgsConstructor
-public class NotePostsService implements RoleChecker{
+public class NotePostsService implements RoleChecker, CreateOrUpdate<NotePosts,PNotePosts>{
 
     private final SysUsersService sysUsersService;
     private final AuthService authService;
@@ -30,6 +32,31 @@ public class NotePostsService implements RoleChecker{
                 system,
                 post_modifier)
                 ::contains);
+    }
+
+    @Override
+    public NotePosts create(PNotePosts pNotePosts){
+        NotePosts post = new NotePosts();
+        post.setUuid(pNotePosts.getUuid() == null ? UUID.randomUUID() : pNotePosts.getUuid());
+        post.setIsDeleted(pNotePosts.getIsDeleted() != null && pNotePosts.getIsDeleted());
+        post.setContent(pNotePosts.getContent());
+        post.setHeader(pNotePosts.getHeader());
+        post.setScope(dictScopesRepository.findByCodeAndIsDeletedIsFalse(pNotePosts.getScope().getValue()));
+        return post;
+    }
+
+    @Override
+    public NotePosts update(PNotePosts pNotePosts){
+        Optional<NotePosts> post = notePostsRepository.findByUniqueIdAndIsDeletedFalse(pNotePosts.getUniqueId());
+        if(post.isEmpty())
+            return null;
+
+        post.get().setScope(dictScopesRepository.findByCodeAndIsDeletedIsFalse(
+                pNotePosts.getScope().getValue()));
+        post.get().setIsDeleted(pNotePosts.getIsDeleted() != null && pNotePosts.getIsDeleted());
+        post.get().setContent(pNotePosts.getContent());
+        post.get().setHeader(pNotePosts.getHeader());
+        return post.get();
     }
 
     public List<PNotePosts> getAllWithScope(){
@@ -46,5 +73,30 @@ public class NotePostsService implements RoleChecker{
 
     public List<PNotePosts> getAll(){
         return PNotePostsBuilder.toPojoList(notePostsRepository.findAllByIsDeletedFalseOrderByCreatedTimestamp());
+    }
+
+    public PNotePosts getById(Long id){
+        Optional<NotePosts> post = notePostsRepository.findByUniqueIdAndIsDeletedFalse(id);
+        if (post.isEmpty())
+            return null;
+
+        return PNotePostsBuilder.PostBuild(post.get());
+    }
+
+    public void createPost(PNotePosts pNotePosts){
+        notePostsRepository.save(create(pNotePosts));
+    }
+
+    public boolean updatePost(PNotePosts pNotePosts){
+        NotePosts post = update(pNotePosts);
+        if(post == null)
+            return false;
+
+        notePostsRepository.save(post);
+        return true;
+    }
+
+    public void deletePost(Long id){
+        notePostsRepository.deleteById(id);
     }
 }

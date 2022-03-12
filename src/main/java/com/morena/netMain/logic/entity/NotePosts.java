@@ -1,10 +1,7 @@
 package com.morena.netMain.logic.entity;
 
 import com.morena.netMain.logic.entity.base.BaseModelEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -16,6 +13,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class NotePosts extends BaseModelEntity {
 
     @Column(name = "content")

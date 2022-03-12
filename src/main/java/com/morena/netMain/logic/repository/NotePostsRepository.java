@@ -21,7 +21,7 @@ public interface NotePostsRepository extends BaseModelEntityRepository<NotePosts
 //    @Query("select np from NotePosts np where np.scope.code in :scopes and np.isDeleted=false order by np.createdTimestamp")
 //    List<NotePosts> customFindAllByScopeCodeInAndIsDeletedFalseOrdered(Set<Long> scopes);
 //
-    @Query("from NotePosts np where np.scope.code between :from and :to and np.isDeleted=false order by np.createdTimestamp")
+    @Query("from NotePosts np where np.scope.code between :from and :to and np.isDeleted=false order by np.createdTimestamp desc")
     List<NotePosts> customFindAllByScopeCodeBetweenAndIsDeletedFalseOrdered(Long from, Long to);
 
    // List<NotePosts> findAllByIsDeletedFalseAndScopeInOrderByCreatedTimestamp(Collection<Long> scopes);

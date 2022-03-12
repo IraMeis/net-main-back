@@ -29,19 +29,6 @@ public class PNotePostsBuilder {
                 .build();
     }
 
-//    public static PNotePosts UserPostBuild(NotePosts notePosts){
-//
-//        return PNotePosts.builder()
-//
-//                .uniqueId(notePosts.getUniqueId())
-//                .createdTimestamp(notePosts.getCreatedTimestamp())
-//
-//                .head(notePosts.getHead())
-//                .content(notePosts.getContent())
-//
-//                .build();
-//    }
-
     public static List<PNotePosts> toPojoList (List<NotePosts> np){
         return np.stream()
                 .map(PNotePostsBuilder::PostBuild)

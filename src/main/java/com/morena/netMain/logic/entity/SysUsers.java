@@ -16,6 +16,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class SysUsers extends BaseModelEntity {
 
     @Column(name = "login")

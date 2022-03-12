@@ -9,5 +9,6 @@ import javax.persistence.*;
 @Table(name = "dict_roles", schema = "public")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class DictRoles extends BaseModelDictionaryEntity {
 }

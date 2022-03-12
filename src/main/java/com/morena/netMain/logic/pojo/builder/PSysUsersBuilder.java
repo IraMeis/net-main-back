@@ -55,6 +55,6 @@ public class PSysUsersBuilder {
                         .value(dictRolesElem.getCode())
                         .label(dictRolesElem.getName())
                         .build())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

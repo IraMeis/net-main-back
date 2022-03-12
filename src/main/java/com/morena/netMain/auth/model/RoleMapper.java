@@ -9,6 +9,6 @@ public class RoleMapper {
     public static Collection<Role> getRolesFromRawRoles(Collection<DictRoles> raw) {
         return raw.stream()
                 .map(rawrole->Role.valueOf(rawrole.getName()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

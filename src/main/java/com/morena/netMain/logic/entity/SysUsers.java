@@ -44,7 +44,7 @@ public class SysUsers extends BaseModelEntity {
             joinColumns = @JoinColumn(name = "user_ref", referencedColumnName = "unique_id"),
             inverseJoinColumns = @JoinColumn(name = "role_ref", referencedColumnName = "unique_id")
    )
-    private Collection<DictRoles> rawRoles = new ArrayList<>();
+    private Collection<DictRoles> rawRoles = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)

@@ -23,11 +23,13 @@ values (1, 1),
        (4, 4),
        (4, 6),
        (4, 3),
+       (4, 7),
 
        (5, 2),
        (5, 4),
        (5, 6),
-       (5, 3);
+       (5, 3),
+       (5, 7);
 
 update sys_users set scope_type=1 where login in ('system', 'admin', 'morena');
 update sys_users set scope_type=2 where login ='erichkraft';

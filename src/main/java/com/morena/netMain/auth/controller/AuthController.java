@@ -18,18 +18,33 @@ public class AuthController {
 
     private final AuthTokenService authTokenService;
 
+    /**
+     * /api/auth/login
+     * @param authRequest
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authRequest) {
         final JwtResponse token = authTokenService.login(authRequest);
         return ResponseEntity.ok(token);
     }
 
+    /**
+     * /api/auth/token
+     * @param request
+     * @return
+     */
     @PostMapping("/token")
     public ResponseEntity<JwtResponse> getNewAccessToken(@RequestBody JwtRefreshRequest request) {
         final JwtResponse token = authTokenService.getAccessToken(request.getRefreshToken());
         return ResponseEntity.ok(token);
     }
 
+    /**
+     * /api/auth/refresh
+     * @param request
+     * @return
+     */
     @PostMapping("/refresh")
     public ResponseEntity<JwtResponse> getNewRefreshToken(@RequestBody JwtRefreshRequest request) {
         final JwtResponse token = authTokenService.refresh(request.getRefreshToken());

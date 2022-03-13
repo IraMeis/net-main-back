@@ -16,6 +16,11 @@ public class NoteCommentsController {
 
     private  final NoteCommentsService noteCommentsService;
 
+    /**
+     * /api/comment/getComment/{id}
+     * @param id
+     * @return
+     */
     @GetMapping("/getComment/{id}")
     public ResponseEntity<PNoteComments> getComment(@PathVariable Long id) {
         PNoteComments comment = noteCommentsService.getCommentById(id);
@@ -24,6 +29,11 @@ public class NoteCommentsController {
                 ResponseEntity.ok(comment);
     }
 
+    /**
+     * /api/comment/createComment
+     * @param comment
+     * @return
+     */
     @PostMapping("/createComment")
     public ResponseEntity<String> createComment(@RequestBody PNoteComments comment){
         return noteCommentsService.createComment(comment) ?
@@ -31,6 +41,11 @@ public class NoteCommentsController {
                 ResponseEntity.badRequest().build();
     }
 
+    /**
+     * /api/comment/updateComment
+     * @param comment
+     * @return
+     */
     @PutMapping("/updateComment")
     public ResponseEntity<String> updateComment(@RequestBody PNoteComments comment){
         return noteCommentsService.updateComment(comment) ?
@@ -38,12 +53,22 @@ public class NoteCommentsController {
                 ResponseEntity.badRequest().build();
     }
 
+    /**
+     * /api/comment/deleteComment/{id}
+     * @param id
+     * @return
+     */
     @DeleteMapping("/deleteComment/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable Long id){
         noteCommentsService.deleteComment(id);
         return ResponseEntity.ok("Deleted");
     }
 
+    /**
+     * /api/comment/getCommentsByPost/{id}
+     * @param id
+     * @return
+     */
     @GetMapping("/getCommentsByPost/{id}")
     public ResponseEntity<List<PNoteComments>> getCommentsByPost(@PathVariable Long id){
         return ResponseEntity.ok(noteCommentsService.getAllByPostRef(id));

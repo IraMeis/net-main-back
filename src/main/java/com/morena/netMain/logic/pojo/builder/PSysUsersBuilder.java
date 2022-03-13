@@ -6,12 +6,11 @@ import com.morena.netMain.logic.pojo.PSysUsers;
 import com.morena.netMain.logic.utils.Pair;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PSysUsersBuilder {
 
-    public static PSysUsers AdminUserBuild(SysUsers sysUsers){
+    public static PSysUsers adminUserBuild(SysUsers sysUsers){
 
         return PSysUsers.builder()
 
@@ -31,12 +30,12 @@ public class PSysUsersBuilder {
                         .label(sysUsers.getScope().getName())
                         .build())
 
-                .isTokenAllowed(sysUsers.getToken() == null || sysUsers.getToken().getIsDeleted())
+                .isTokenAllowed(sysUsers.getToken() == null || !sysUsers.getToken().getIsDeleted())
 
                 .build();
     }
 
-    public static PSysUsers UserUserBuild(SysUsers sysUsers){
+    public static PSysUsers userUserBuild(SysUsers sysUsers){
 
         return PSysUsers.builder()
 

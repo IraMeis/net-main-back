@@ -1,6 +1,7 @@
 package com.morena.netMain.logic.service;
 
 import com.morena.netMain.logic.entity.NoteComments;
+import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.pojo.PNoteComments;
 import com.morena.netMain.logic.pojo.builder.PNoteCommentsBuilder;
 import com.morena.netMain.logic.repository.NoteCommentsRepository;
@@ -9,15 +10,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.morena.netMain.auth.model.Role.*;
 
 @Service
 @RequiredArgsConstructor
-public class NoteCommentsService implements RoleChecker{
+public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMaker<NoteComments, PNoteComments>{
 
     private final NoteCommentsRepository noteCommentsRepository;
     private final AuthService authService;
+    private final SysUsersService sysUsersService;
 
     @Override
     public boolean isAdmin(){
@@ -28,13 +31,84 @@ public class NoteCommentsService implements RoleChecker{
                 ::contains);
     }
 
+    @Override
+    public NoteComments creatable(PNoteComments pojo) {
+        NoteComments comment = new NoteComments();
+        comment.setUuid(pojo.getUuid() == null ? UUID.randomUUID() : pojo.getUuid());
+        comment.setIsDeleted(pojo.getIsDeleted() != null && pojo.getIsDeleted());
+
+        Optional<SysUsers> user = sysUsersService.getUserById(pojo.getAuthor().getValue());
+        if(user.isEmpty())
+            return null;
+
+        comment.setAuthor(user.get());
+        comment.setContent(pojo.getContent());
+        comment.setIsModified(false);
+        comment.setPostRef(pojo.getPostId());
+        return comment;
+    }
+
+    @Override
+    public NoteComments updatable(PNoteComments pojo) {
+        Optional<NoteComments> comment = noteCommentsRepository.findByUniqueIdAndIsDeletedFalse(pojo.getUniqueId());
+        if(comment.isEmpty())
+            return null;
+
+        comment.get().setContent(pojo.getContent());
+        comment.get().setIsModified(true);
+        return comment.get();
+    }
+
     public PNoteComments getCommentById(Long id){
-        Optional<NoteComments> comment = noteCommentsRepository.findByUniqueIdAndIsDeletedFalse(id);
+        boolean admin = isAdmin();
+        Optional<NoteComments> comment;
+
+        if(admin)
+            comment = noteCommentsRepository.findByUniqueId(id);
+        else
+            comment = noteCommentsRepository.findByUniqueIdAndIsDeletedFalse(id);
+
         if (comment.isEmpty())
             return null;
 
-        if(isAdmin())
-            return PNoteCommentsBuilder.AdminCommentBuild(comment.get());
-        return PNoteCommentsBuilder.UserCommentBuild(comment.get());
+        if(admin)
+            return PNoteCommentsBuilder.adminCommentBuild(comment.get());
+        return PNoteCommentsBuilder.userCommentBuild(comment.get());
+    }
+
+    public List<PNoteComments> getAllByPostRef (Long postId){
+        boolean admin = isAdmin();
+        List<NoteComments> comments;
+
+        if(admin)
+            comments = noteCommentsRepository.findAllByPostRefOrderByCreatedTimestamp(postId);
+        else
+            comments = noteCommentsRepository.findAllByPostRefAndIsDeletedFalseOrderByCreatedTimestamp(postId);
+
+        if (admin)
+            return PNoteCommentsBuilder.adminToPojoList(comments);
+        return PNoteCommentsBuilder.userToPojoList(comments);
+    }
+
+    public boolean createComment(PNoteComments pNoteComments){
+        NoteComments comment = creatable(pNoteComments);
+        if(comment == null)
+            return false;
+
+        noteCommentsRepository.save(comment);
+        return true;
+    }
+
+    public boolean updateComment(PNoteComments pNoteComments){
+        NoteComments comment = updatable(pNoteComments);
+        if(comment == null)
+            return false;
+
+        noteCommentsRepository.save(comment);
+        return true;
+    }
+
+    public void deleteComment(Long id){
+        noteCommentsRepository.deleteById(id);
     }
 }

@@ -19,6 +19,8 @@ public interface BaseModelEntityRepository<T extends BaseModelEntity, ID> extend
 
     Optional<T> findByUniqueIdAndIsDeletedFalse(Long id);
 
+    Optional<T> findByUniqueId(Long id);
+
     Optional<T> findByUuidAndIsDeletedFalse(UUID uuid);
 
     @Override

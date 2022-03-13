@@ -3,6 +3,7 @@ package com.morena.netMain.logic.controller;
 import com.morena.netMain.logic.pojo.PNoteComments;
 import com.morena.netMain.logic.service.NoteCommentsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,28 +19,33 @@ public class NoteCommentsController {
     @GetMapping("/getComment/{id}")
     public ResponseEntity<PNoteComments> getComment(@PathVariable Long id) {
         PNoteComments comment = noteCommentsService.getCommentById(id);
-        if (comment == null)
-            return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(comment);
+        return comment == null ?
+                ResponseEntity.badRequest().build() :
+                ResponseEntity.ok(comment);
     }
 
     @PostMapping("/createComment")
     public ResponseEntity<String> createComment(@RequestBody PNoteComments comment){
-        return null;
+        return noteCommentsService.createComment(comment) ?
+                ResponseEntity.status(HttpStatus.CREATED).body("Created") :
+                ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/updateComment")
     public ResponseEntity<String> updateComment(@RequestBody PNoteComments comment){
-        return null;
+        return noteCommentsService.updateComment(comment) ?
+                ResponseEntity.ok("Updated") :
+                ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("/deleteComment")
-    public ResponseEntity<String> deleteComment(@RequestBody PNoteComments comment){
-        return null;
+    @DeleteMapping("/deleteComment/{id}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long id){
+        noteCommentsService.deleteComment(id);
+        return ResponseEntity.ok("Deleted");
     }
 
     @GetMapping("/getCommentsByPost/{id}")
     public ResponseEntity<List<PNoteComments>> getCommentsByPost(@PathVariable Long id){
-        return null;
+        return ResponseEntity.ok(noteCommentsService.getAllByPostRef(id));
     }
 }

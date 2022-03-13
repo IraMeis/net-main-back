@@ -20,33 +20,7 @@ public class SysUsersService {
         return sysUsersRepository.findByUniqueIdAndIsDeletedFalse(authService.getCurrentUserId());
     }
 
-    private PSysUsers makeForUser (SysUsers sysUsers){
-        return PSysUsers.builder()
-                .login(sysUsers.getLogin())
-                .about(sysUsers.getAbout())
-                .scope(Pair.builder()
-                        .label(sysUsers.getScope().getName())
-                        .value(sysUsers.getScope().getCode())
-                        .build())
-                .build();
-    }
-
-    private PSysUsers makeForAdmin(SysUsers sysUsers){
-        return PSysUsers.builder()
-                .uniqueId(sysUsers.getUniqueId())
-                .uuid(sysUsers.getUuid())
-                .login(sysUsers.getLogin())
-                //.password(sysUsers.getPassword())
-                .about(sysUsers.getAbout())
-                .scope(Pair.builder()
-                        .label(sysUsers.getScope().getName())
-                        .value(sysUsers.getScope().getCode())
-                        .build())
-                .build();
-    }
-
-    public PSysUsers getUserInvRole (){
-
-        return null;
+    public Optional<SysUsers> getUserById(Long id){
+        return sysUsersRepository.findByUniqueIdAndIsDeletedFalse(id);
     }
 }

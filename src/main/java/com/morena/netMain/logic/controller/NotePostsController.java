@@ -40,7 +40,7 @@ public class NotePostsController {
     @PostMapping("/createPost")
     public ResponseEntity<String> createPost(@RequestBody PNotePosts post){
         notePostsService.createPost(post);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created");
     }
 
     /**

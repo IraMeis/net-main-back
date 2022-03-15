@@ -28,6 +28,7 @@ public class AuthUserService {
                 .login(sysUsers.getLogin())
                 .password(sysUsers.getPassword())
                 .roles(RoleMapper.getRolesFromRawRoles(sysUsers.getRawRoles()))
+                .scope(sysUsers.getScope().getCode())
                 .build();
     }
 

@@ -13,4 +13,5 @@ public class AuthUser {
     private String login;
     private String password;
     private Collection<Role> roles;
+    private Long scope;
 }

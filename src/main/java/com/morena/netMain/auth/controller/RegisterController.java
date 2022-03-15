@@ -26,6 +26,6 @@ public class RegisterController {
     public ResponseEntity<String> register (@RequestBody RegisterUser user){
         return registerService.saveUser(user) ?
                 ResponseEntity.status(HttpStatus.CREATED).body("Registered") :
-                ResponseEntity.badRequest().body("This login already exists");
+                ResponseEntity.badRequest().body("This login is already in use");
     }
 }

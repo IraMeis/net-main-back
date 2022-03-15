@@ -27,4 +27,8 @@ public class AuthService {
     public Set<Role> getCurrentUserRoles(){
         return getAuthInfo().getRoles();
     }
+
+    public Long getCurrentUserScope(){
+        return getAuthInfo().getScope();
+    }
 }

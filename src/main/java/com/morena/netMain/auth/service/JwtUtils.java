@@ -17,6 +17,7 @@ public final class JwtUtils {
         final JwtAuthentication jwtInfoToken = new JwtAuthentication();
         jwtInfoToken.setRoles(getRoles(claims));
         jwtInfoToken.setId(claims.get("id", Long.class));
+        jwtInfoToken.setScope(claims.get("scope", Long.class));
         jwtInfoToken.setLogin(claims.getSubject());
         return jwtInfoToken;
     }

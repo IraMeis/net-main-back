@@ -40,7 +40,7 @@ public class JwtFilter extends GenericFilterBean {
         fc.doFilter(request, response);
     }
 
-    private String getTokenFromRequest(HttpServletRequest request) {
+    private static String getTokenFromRequest(HttpServletRequest request) {
         final String bearer = request.getHeader(AUTHORIZATION);
         if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);

@@ -13,10 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -24,42 +25,46 @@ public class JwtProvider {
 
     private final String jwtAccessSecret;
     private final String jwtRefreshSecret;
+    private final long accessExpirationMinutes;
+    private final long refreshExpirationDays;
 
     //todo добавить нормальные пароли
     public JwtProvider(
             @Value("${jwt.secret.access}") String jwtAccessSecret,
-            @Value("${jwt.secret.refresh}") String jwtRefreshSecret
+            @Value("${jwt.secret.refresh}") String jwtRefreshSecret,
+            @Value("${accessTokenMinutes}") long accessExpirationMinutes,
+            @Value("${refreshTokenDays}") long refreshExpirationDays
     ) {
         this.jwtAccessSecret = jwtAccessSecret;
         this.jwtRefreshSecret = jwtRefreshSecret;
+        this.accessExpirationMinutes = accessExpirationMinutes;
+        this.refreshExpirationDays = refreshExpirationDays;
     }
 
     //todo время жизни установить 10 мин - после содинения с фронтом
     public String generateAccessToken(@NonNull AuthUser user) {
-        final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(90).atZone(ZoneId.systemDefault()).toInstant();
-        final Date accessExpiration = Date.from(accessExpirationInstant);
-        final String accessToken = Jwts.builder()
+        final ZonedDateTime expIn = LocalDateTime.now().plusMinutes(accessExpirationMinutes).atZone(ZoneId.systemDefault());
+        final Date accessExpiration = Date.from(expIn.toInstant());
+        return Jwts.builder()
                 .setSubject(user.getLogin())
                 .setExpiration(accessExpiration)
                 .signWith(SignatureAlgorithm.HS512, jwtAccessSecret)
                 .claim("roles", user.getRoles())
                 .claim("login", user.getLogin())
                 .claim("id", user.getId())
+                .addClaims(Map.of("expires", expIn.withZoneSameInstant(ZoneId.of("GMT")).toLocalDateTime().toString()))
                 .compact();
-        return accessToken;
     }
 
     public String generateRefreshToken(@NonNull AuthUser user) {
-        final LocalDateTime now = LocalDateTime.now();
-        final Instant refreshExpirationInstant = now.plusDays(30).atZone(ZoneId.systemDefault()).toInstant();
-        final Date refreshExpiration = Date.from(refreshExpirationInstant);
-        final String refreshToken = Jwts.builder()
+        final ZonedDateTime expIn = LocalDateTime.now().plusDays(refreshExpirationDays).atZone(ZoneId.systemDefault());
+        final Date refreshExpiration = Date.from(expIn.toInstant());
+        return Jwts.builder()
                 .setSubject(user.getLogin())
                 .setExpiration(refreshExpiration)
+                .addClaims(Map.of("expires", expIn.withZoneSameInstant(ZoneId.of("GMT")).toLocalDateTime().toString()))
                 .signWith(SignatureAlgorithm.HS512, jwtRefreshSecret)
                 .compact();
-        return refreshToken;
     }
 
     public boolean validateAccessToken(@NonNull String token) {

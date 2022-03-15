@@ -17,6 +17,7 @@ public class JwtAuthentication implements Authentication {
     private String login;
     private Long id;
     private Set<Role> roles;
+    private Long scope;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { return roles; }

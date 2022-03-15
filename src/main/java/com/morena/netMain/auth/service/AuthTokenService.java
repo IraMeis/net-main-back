@@ -114,7 +114,7 @@ public class AuthTokenService {
         return buildSimpleAnswer("Токен невалиден");
     }
 
-    private JwtResponse buildSimpleAnswer(String reason){
+    private static JwtResponse buildSimpleAnswer(String reason){
         return JwtResponse.builder()
                 .accessToken(null)
                 .refreshToken(null)

@@ -6,7 +6,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface BaseModelDictionaryEntityRepository<T extends BaseModelDictionaryEntity,ID> extends BaseModelEntityRepository<T, ID> {
 
-    T findByCodeAndIsDeletedIsFalse (Long code);
+    T findOneByCodeAndIsDeletedIsFalse(Long code);
 
     T findByNameAndIsDeletedIsFalse (String name);
 }

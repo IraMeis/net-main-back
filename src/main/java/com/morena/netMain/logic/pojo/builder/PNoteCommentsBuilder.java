@@ -4,6 +4,7 @@ import com.morena.netMain.logic.entity.NoteComments;
 import com.morena.netMain.logic.pojo.PNoteComments;
 import com.morena.netMain.logic.utils.Pair;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,12 +51,16 @@ public class PNoteCommentsBuilder {
     }
 
     public static List<PNoteComments> userToPojoList (List<NoteComments> nc){
+        if (nc == null)
+            return Collections.emptyList();
         return nc.stream()
                 .map(PNoteCommentsBuilder::userCommentBuild)
                 .collect(Collectors.toList());
     }
 
     public static List<PNoteComments> adminToPojoList(List<NoteComments> nc){
+        if (nc == null)
+            return Collections.emptyList();
         return nc.stream()
                 .map(PNoteCommentsBuilder::adminCommentBuild)
                 .collect(Collectors.toList());

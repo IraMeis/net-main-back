@@ -17,11 +17,11 @@ public interface BaseModelEntityRepository<T extends BaseModelEntity, ID> extend
 
     List<T> findAllByIsDeletedTrue();
 
-    Optional<T> findByUniqueIdAndIsDeletedFalse(Long id);
+    Optional<T> findOneByUniqueIdAndIsDeletedFalse(Long id);
 
-    Optional<T> findByUniqueId(Long id);
+    Optional<T> findOneByUniqueId(Long id);
 
-    Optional<T> findByUuidAndIsDeletedFalse(UUID uuid);
+    Optional<T> findOneByUuidAndIsDeletedFalse(UUID uuid);
 
     @Override
     @Modifying

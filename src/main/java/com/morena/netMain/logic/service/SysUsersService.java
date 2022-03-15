@@ -31,11 +31,11 @@ public class SysUsersService implements RoleChecker{
     }
 
     public Optional<SysUsers> getCurrentUser(){
-        return sysUsersRepository.findByUniqueIdAndIsDeletedFalse(authService.getCurrentUserId());
+        return sysUsersRepository.findOneByUniqueIdAndIsDeletedFalse(authService.getCurrentUserId());
     }
 
     public Optional<SysUsers> getUserById(Long id){
-        return sysUsersRepository.findByUniqueIdAndIsDeletedFalse(id);
+        return sysUsersRepository.findOneByUniqueIdAndIsDeletedFalse(id);
     }
 
     public PSysUsers getByIdMapped(Long id){
@@ -59,7 +59,7 @@ public class SysUsersService implements RoleChecker{
     }
 
     public boolean updateAdditionalData (Pair userData){
-        Optional<SysUsers> sysUsers = sysUsersRepository.findByUniqueIdAndIsDeletedFalse(userData.getValue());
+        Optional<SysUsers> sysUsers = sysUsersRepository.findOneByUniqueIdAndIsDeletedFalse(userData.getValue());
         if (sysUsers.isEmpty())
             return false;
 

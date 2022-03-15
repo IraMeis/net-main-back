@@ -50,7 +50,7 @@ public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMak
 
     @Override
     public NoteComments updatable(PNoteComments pojo) {
-        Optional<NoteComments> comment = noteCommentsRepository.findByUniqueIdAndIsDeletedFalse(pojo.getUniqueId());
+        Optional<NoteComments> comment = noteCommentsRepository.findOneByUniqueIdAndIsDeletedFalse(pojo.getUniqueId());
         if(comment.isEmpty())
             return null;
 
@@ -64,9 +64,9 @@ public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMak
         Optional<NoteComments> comment;
 
         if(admin)
-            comment = noteCommentsRepository.findByUniqueId(id);
+            comment = noteCommentsRepository.findOneByUniqueId(id);
         else
-            comment = noteCommentsRepository.findByUniqueIdAndIsDeletedFalse(id);
+            comment = noteCommentsRepository.findOneByUniqueIdAndIsDeletedFalse(id);
 
         if (comment.isEmpty())
             return null;

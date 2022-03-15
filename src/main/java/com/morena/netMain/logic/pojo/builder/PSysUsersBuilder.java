@@ -4,6 +4,7 @@ import com.morena.netMain.logic.entity.DictRoles;
 import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.pojo.PSysUsers;
 import com.morena.netMain.logic.utils.Pair;
+import com.sun.istack.NotNull;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -48,7 +49,7 @@ public class PSysUsersBuilder {
                 .build();
     }
 
-    private static Collection<Pair> mapRolesToPair (Collection<DictRoles> dictRoles){
+    private static Collection<Pair> mapRolesToPair (@NotNull Collection<DictRoles> dictRoles){
         return dictRoles.stream()
                 .map(dictRolesElem -> Pair.builder()
                         .value(dictRolesElem.getCode())

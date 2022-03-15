@@ -1,9 +1,13 @@
+import com.morena.netMain.logic.entity.NotePosts;
+import com.morena.netMain.logic.pojo.PNotePosts;
+import com.morena.netMain.logic.pojo.builder.PNotePostsBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainTest {
 
@@ -27,10 +31,15 @@ public class MainTest {
         return "("+list.toString().substring(1, list.toString().length()-1)+")";
     }
 
+    public static List<PNotePosts> toPojoList (List<NotePosts> np){
+        return np.stream()
+                .map(PNotePostsBuilder::PostBuild)
+                .collect(Collectors.toList());
+    }
     @Test
     public void toPojo(){
 
-        System.out.println(customToSting(List.of(1,2,3,4,5)));
+        System.out.println( toPojoList(null));
 
     }
 }

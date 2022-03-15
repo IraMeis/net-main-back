@@ -90,9 +90,13 @@ public class NotePostsController {
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate to,
             @RequestParam(required = false) String label,
-            @RequestParam(required = false) Boolean inHead,
-            @RequestParam(required = false) Boolean inContent,
-            @RequestParam(required = false) Boolean inComments){
-        return null;
+            @RequestParam(required = false, defaultValue = "true") Boolean inHead,
+            @RequestParam(required = false, defaultValue = "true") Boolean inContent,
+            @RequestParam(required = false, defaultValue = "true") Boolean inComments,
+            @RequestParam(required = false) Long[] scopes,
+            @RequestParam(required = false) Long[] commentatorIds){
+        return  ResponseEntity.ok(notePostsService.doPostFilter(
+                from, to, label, inHead, inContent, inComments,
+                scopes == null ? null : List.of(scopes), commentatorIds == null ? null : List.of(commentatorIds)));
     }
 }

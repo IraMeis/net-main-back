@@ -1,0 +1,109 @@
+    /**
+     * --LABEL --IDS
+     * @param scopes
+     * @param authors
+     * @param fromTime
+     * @param toTime
+     * @param contentLabel
+     * @param headerLabel
+     * @param commentLabel
+     * @return
+     */
+    @Query("from NotePosts pp where pp.uniqueId in (" +
+            "select distinct np.uniqueId from NotePosts np inner join NoteComments nc on np.uniqueId = nc.postRef " +
+            "where np.scope.code in :scopes and np.createdTimestamp between :fromTime and :toTime " +
+            "and np.header like :headerLabel and np.content like :contentLabel " +
+            "and nc.content like :commentLabel and nc.author.uniqueId in :authors) " +
+            "order by pp.createdTimestamp desc")
+    List<NotePosts> customFindAllByScopeInTimestampBetweenAuthorsInContentContainHeaderContainByCommentsContainOrdered(
+                    Iterable<Long> scopes,
+                    Iterable<Long> authors,
+                    LocalDateTime fromTime,
+                    LocalDateTime toTime,
+                    String contentLabel,
+                    String headerLabel,
+                    String commentLabel);
+
+     /**
+     * --LABEL --NO-IDS --COMMENTS
+     * @param scopes
+     * @param fromTime
+     * @param toTime
+     * @param contentLabel
+     * @param headerLabel
+     * @param commentLabel
+     * @return
+     */
+    @Query("from NotePosts pp where pp.uniqueId in (" +
+            "select distinct np.uniqueId from NotePosts np inner join NoteComments nc on np.uniqueId = nc.postRef " +
+            "where np.scope.code in :scopes and np.createdTimestamp between :fromTime and :toTime " +
+            "and np.header like :headerLabel and np.content like :contentLabel and nc.content like :commentLabel) " +
+            "order by pp.createdTimestamp desc")
+    List<NotePosts> customFindAllByScopeInTimestampBetweenContentContainHeaderContainCommentsContainOrdered(
+            Iterable<Long> scopes,
+            LocalDateTime fromTime,
+            LocalDateTime toTime,
+            String contentLabel,
+            String headerLabel,
+            String commentLabel);
+
+    /**
+     * --LABEL --NO-IDS --NO-COMMENTS
+     * @param scopes
+     * @param fromTime
+     * @param toTime
+     * @param contentLabel
+     * @param headerLabel
+     * @return
+     */
+    @Query("from NotePosts np " +
+            "where np.scope.code in :scopes and np.createdTimestamp between :fromTime and :toTime " +
+            "and np.header like :headerLabel and np.content like :contentLabel " +
+            "order by np.createdTimestamp desc")
+    List<NotePosts> customFindAllByScopeInTimestampBetweenContentContainHeaderContainOrdered(
+            Iterable<Long> scopes,
+            LocalDateTime fromTime,
+            LocalDateTime toTime,
+            String contentLabel,
+            String headerLabel);
+
+    /**
+     * --NO-LABEL --IDS
+     * @param scopes
+     * @param authors
+     * @param fromTime
+     * @param toTime
+     * @return
+     */
+    @Query("from NotePosts pp where pp.uniqueId in (" +
+            "select distinct np.uniqueId from NotePosts np inner join NoteComments nc on np.uniqueId = nc.postRef " +
+
+			"where np.scope.code in :scopes and np.createdTimestamp between :fromTime and :toTime " +
+            "and nc.author.uniqueId in :authors) " +
+            "order by pp.createdTimestamp desc")
+    List<NotePosts> customFindAllByScopeInTimestampBetweenAuthorsInOrdered(
+            Iterable<Long> scopes,
+            Iterable<Long> authors,
+            LocalDateTime fromTime,
+            LocalDateTime toTime);
+
+    /**
+     * --NO-LABEL --NO-IDS
+     * @param scopes
+     * @param fromTime
+     * @param toTime
+     * @return
+     */
+    @Query("from NotePosts np " +
+            "where np.scope.code in :scopes and np.createdTimestamp between :fromTime and :toTime " +
+            "order by np.createdTimestamp desc")
+    List<NotePosts> customFindAllByScopeInTimestampBetweenOrdered(
+            Iterable<Long> scopes,
+            LocalDateTime fromTime,
+            LocalDateTime toTime);
+
+    @Query("select min(np.createdTimestamp) from NotePosts np")
+    LocalDateTime findFirstDate();
+
+    @Query("select max(np.createdTimestamp) from NotePosts np")
+    LocalDateTime findLastDate();

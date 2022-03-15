@@ -10,6 +10,7 @@ import com.morena.netMain.logic.repository.NotePostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +20,6 @@ import java.util.UUID;
 public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNotePosts> {
 
     private final SysUsersService sysUsersService;
-    private final AuthService authService;
     private final NotePostsRepository notePostsRepository;
     private final DictScopesRepository dictScopesRepository;
 
@@ -62,7 +62,7 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
     }
 
     public List<PNotePosts> getAll(){
-        return PNotePostsBuilder.toPojoList(notePostsRepository.findAllByIsDeletedFalseOrderByCreatedTimestamp());
+        return PNotePostsBuilder.toPojoList(notePostsRepository.findAllByIsDeletedFalseOrderByCreatedTimestampDesc());
     }
 
     public PNotePosts getById(Long id){
@@ -88,5 +88,14 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
 
     public void deletePost(Long id){
         notePostsRepository.deleteById(id);
+    }
+
+    public List<PNotePosts> doPostFilter(LocalDate from, LocalDate to,
+                                        String label, Boolean inHead, Boolean inContent, Boolean inComment,
+                                        List<Long> scopes,
+                                        List<Long> commentatorIds){
+
+        return PNotePostsBuilder.toPojoList(notePostsRepository.findAllByParsedRequest(from, to,
+                label, inHead, inContent, inComment, scopes, commentatorIds));
     }
 }

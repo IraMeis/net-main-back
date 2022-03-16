@@ -1,6 +1,7 @@
 package com.morena.netMain.logic.controller;
 
-import com.morena.netMain.logic.pojo.PSysUsers;
+import com.morena.netMain.logic.model.PSysUsers;
+import com.morena.netMain.logic.model.filter.UserFilterRequest;
 import com.morena.netMain.logic.service.SysUsersService;
 import com.morena.netMain.logic.utils.LocalDateConvertor;
 import com.morena.netMain.logic.utils.Pair;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -78,21 +80,58 @@ public class SysUsersController {
         return ResponseEntity.ok("Banned");
     }
 
+    /**
+     * /api/user/setScope/{id}/{scopeCode}
+     * @param id
+     * @param scopeCode
+     * @return
+     */
+    @PutMapping("/setScope/{id}/{scopeCode}")
+    public ResponseEntity<String> setScope(@PathVariable Long id, @PathVariable Long scopeCode){
+        return sysUsersService.changeScope(id, scopeCode) ?
+                ResponseEntity.ok("Updated") :
+                ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/getStatistic/{id}")
     public ResponseEntity<PSysUsers> getStatistic(@PathVariable Long id){
         return null;
     }
 
+    /**
+     * /api/user/getFilteredUsers
+     * @param from
+     * @param to
+     * @param label
+     * @param scopes
+     * @param isDeleted
+     * @param isActive
+     * @param isUser
+     * @return
+     */
     @GetMapping("/getFilteredUsers")
-    public ResponseEntity<List<PSysUsers>> getFilteredUsers(
+    public ResponseEntity<Collection<PSysUsers>> getFilteredUsers(
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate to,
             @RequestParam(required = false) String label,
-            @RequestParam(required = false) Long scope,
-            @RequestParam(required = false) Boolean inDeleted,
-            @RequestParam(required = false) Boolean inActive
-            ){
-        return null;
+            @RequestParam(required = false) Long[] scopes,
+            @RequestParam(required = false) Boolean isDeleted,
+            @RequestParam(required = false) Boolean isActive,
+            @RequestParam(required = false) Boolean isUser){
+
+        UserFilterRequest request = UserFilterRequest.builder()
+                .label(label)
+                .from(from)
+                .to(to)
+                .scopes(scopes == null ? null : List.of(scopes))
+                .isUser(isUser)
+                .isDeleted(isDeleted)
+                .isActive(isActive)
+                .build();
+
+        return ResponseEntity.ok(request.isNullFilter() ?
+                sysUsersService.getAll() :
+                sysUsersService.getFilteredUsers(request));
     }
 
 }

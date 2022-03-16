@@ -1,7 +1,7 @@
 import com.morena.netMain.logic.entity.NotePosts;
-import com.morena.netMain.logic.pojo.PNotePosts;
-import com.morena.netMain.logic.pojo.builder.PNotePostsBuilder;
-import org.junit.jupiter.api.Test;
+import com.morena.netMain.logic.model.PNotePosts;
+import com.morena.netMain.logic.model.builder.PNotePostsBuilder;
+import org.junit.jupiter.api.Disabled;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -9,9 +9,10 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Disabled
 public class MainTest {
 
-    @Test
+   // @Test
     public void printTime(){
         //исходное время
         ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Atlantic/Azores"));
@@ -33,10 +34,10 @@ public class MainTest {
 
     public static List<PNotePosts> toPojoList (List<NotePosts> np){
         return np.stream()
-                .map(PNotePostsBuilder::PostBuild)
+                .map(PNotePostsBuilder::toPojo)
                 .collect(Collectors.toList());
     }
-    @Test
+   // @Test
     public void toPojo(){
 
         System.out.println( toPojoList(null));

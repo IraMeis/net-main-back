@@ -413,3 +413,27 @@ comment on column net_runs.is_deleted is 'Признак удалённой за
 comment on column net_runs.content is 'Объект evaluation';
 
 comment on column net_runs.net_ref is 'Ссылка на модель';
+
+create view post_and_comment(post_unique_id, post_uuid,
+                             post_header, post_content, post_scope_type, post_created_timestamp, post_modified_timestamp,
+                             post_is_deleted, commenter_unique_id, commenter_login, comment_content,
+                             comment_unique_id, comment_uuid) as
+select distinct
+    np.unique_id,
+    np.uuid,
+    np.header,
+    np.content,
+    np.scope_type,
+    np.created_timestamp,
+    np.modified_timestamp,
+    np.is_deleted,
+    nc.author_ref,
+    su.login,
+    nc.content,
+    nc.unique_id,
+    nc.uuid
+
+from
+    note_posts np inner join note_comments nc on np.unique_id = nc.post_ref
+                  inner join sys_users su on nc.author_ref = su.unique_id
+order by np.created_timestamp;

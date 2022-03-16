@@ -1,17 +1,19 @@
-package com.morena.netMain.logic.pojo.builder;
+package com.morena.netMain.logic.model.builder;
 
 import com.morena.netMain.logic.entity.DictRoles;
 import com.morena.netMain.logic.entity.SysUsers;
-import com.morena.netMain.logic.pojo.PSysUsers;
+import com.morena.netMain.logic.model.PSysUsers;
 import com.morena.netMain.logic.utils.Pair;
 import com.sun.istack.NotNull;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class PSysUsersBuilder {
 
-    public static PSysUsers adminUserBuild(SysUsers sysUsers){
+    public static PSysUsers toAdminPojo(SysUsers sysUsers){
 
         return PSysUsers.builder()
 
@@ -36,7 +38,7 @@ public class PSysUsersBuilder {
                 .build();
     }
 
-    public static PSysUsers userUserBuild(SysUsers sysUsers){
+    public static PSysUsers toUserPojo(SysUsers sysUsers){
 
         return PSysUsers.builder()
 
@@ -56,5 +58,13 @@ public class PSysUsersBuilder {
                         .label(dictRolesElem.getName())
                         .build())
                 .collect(Collectors.toSet());
+    }
+
+    public static List<PSysUsers> toAdminPojoList(List<SysUsers> users){
+        if (users == null)
+            return Collections.emptyList();
+        return users.stream()
+                .map(PSysUsersBuilder::toAdminPojo)
+                .collect(Collectors.toList());
     }
 }

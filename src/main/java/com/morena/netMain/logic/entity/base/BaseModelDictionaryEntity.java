@@ -1,8 +1,6 @@
 package com.morena.netMain.logic.entity.base;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 

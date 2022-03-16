@@ -1,15 +1,17 @@
-package com.morena.netMain.logic.pojo;
+package com.morena.netMain.logic.model;
 
 import com.morena.netMain.logic.utils.Pair;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Objects;
 import java.util.UUID;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Builder
 public class PSysUsers {
 
@@ -29,4 +31,18 @@ public class PSysUsers {
 
     private Boolean isTokenAllowed;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PSysUsers users= (PSysUsers) o;
+
+        return Objects.equals(uuid, users.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid!= null ? uuid.hashCode() : 0;
+    }
 }

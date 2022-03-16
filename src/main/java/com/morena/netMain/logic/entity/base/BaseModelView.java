@@ -1,18 +1,16 @@
 package com.morena.netMain.logic.entity.base;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 @MappedSuperclass
-@Data
 @EqualsAndHashCode
-public abstract class BaseModelLink implements Serializable {
+public abstract class BaseModelView implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "unique_id")
     private Long uniqueId;
-
+    private UUID uuid;
 }

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,7 +18,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public abstract class BaseModelEntity implements Serializable {
-//public abstract class BaseModelEntity implements Serializable, Persistable<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,33 +54,4 @@ public abstract class BaseModelEntity implements Serializable {
         return uuid != null ? uuid.hashCode() : 0;
     }
 
-//    @Transient
-//    private boolean isNew = true;
-//
-//    @Override
-//    public boolean isNew() {
-//        return isNew;
-//    }
-//
-//    @PostLoad
-//    void markNotNew() {
-//        this.isNew = false;
-//    }
-//
-//    @PrePersist
-//    public void initialize() {
-//        markNotNew();
-//        if (uuid == null) {
-//            uuid = UUID.randomUUID();
-//        }
-//        if (isDeleted==null){
-//            isDeleted=false;
-//        }
-//
-//    }
-//
-//    @Override
-//    public Long getId() {
-//        return uniqueId;
-//    }
 }

@@ -1,27 +1,28 @@
 package com.morena.netMain.logic.service;
 
-import com.morena.netMain.logic.entity.NotePosts;
-import com.morena.netMain.logic.entity.SysUsers;
-import com.morena.netMain.logic.pojo.PNotePosts;
-import com.morena.netMain.logic.pojo.builder.PNotePostsBuilder;
+import com.morena.netMain.logic.entity.*;
+import com.morena.netMain.logic.model.PNotePosts;
+import com.morena.netMain.logic.model.builder.PNotePostsBuilder;
+import com.morena.netMain.logic.model.filter.PostFilterRequest;
 import com.morena.netMain.logic.repository.DictScopesRepository;
 import com.morena.netMain.logic.repository.NotePostsRepository;
 
+import com.morena.netMain.logic.repository.ViewPostCommentRepository;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNotePosts> {
 
-    private final AuthService authService;
+    private final SysUsersService sysUsersService;
     private final NotePostsRepository notePostsRepository;
     private final DictScopesRepository dictScopesRepository;
+    private final ViewPostCommentRepository viewPostCommentRepository;
 
     @Override
     public NotePosts creatable(PNotePosts pojo){
@@ -51,23 +52,40 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
 
     public List<PNotePosts> getAllWithScope(){
 
+        Optional<SysUsers> sysUsers = sysUsersService.getCurrentUser();
+        if(sysUsers.isEmpty())
+            return null;
+
         Long to = dictScopesRepository.findTopByOrderByCodeDesc().getCode();
-        Long start = authService.getCurrentUserScope();
+        Long start = sysUsers.get().getScope().getCode();
+
         List<NotePosts> posts = notePostsRepository.customFindAllByScopeCodeBetweenAndIsDeletedFalseOrdered(start, to);
 
         return PNotePostsBuilder.toPojoList(posts);
     }
 
-    public List<PNotePosts> getAll(){
+    public List<PNotePosts> getAllNotDeleted(){
         return PNotePostsBuilder.toPojoList(notePostsRepository.findAllByIsDeletedFalseOrderByCreatedTimestampDesc());
     }
 
-    public PNotePosts getById(Long id){
+    public List<PNotePosts> getAll(){
+        return PNotePostsBuilder.toPojoList(notePostsRepository.findAllByOrderByCreatedTimestampDesc());
+    }
+
+    public PNotePosts getByIdNotDeleted(Long id){
         Optional<NotePosts> post = notePostsRepository.findOneByUniqueIdAndIsDeletedFalse(id);
         if (post.isEmpty())
             return null;
 
-        return PNotePostsBuilder.PostBuild(post.get());
+        return PNotePostsBuilder.toPojo(post.get());
+    }
+
+    public PNotePosts getById(Long id){
+        Optional<NotePosts> post = notePostsRepository.findOneByUniqueId(id);
+        if (post.isEmpty())
+            return null;
+
+        return PNotePostsBuilder.toPojo(post.get());
     }
 
     public void createPost(PNotePosts pNotePosts){
@@ -87,12 +105,62 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
         notePostsRepository.deleteById(id);
     }
 
-    public List<PNotePosts> doPostFilter(LocalDate from, LocalDate to,
-                                        String label, Boolean inHead, Boolean inContent, Boolean inComment,
-                                        List<Long> scopes,
-                                        List<Long> commentatorIds){
+    public Collection<PNotePosts> getFilteredPosts(PostFilterRequest postFilterRequest){
+       List<ViewPostComment> posts = new ArrayList<>();
+       viewPostCommentRepository.findAll(predicateParse(postFilterRequest))
+               .forEach(posts::add);
 
-        return PNotePostsBuilder.toPojoList(notePostsRepository.findAllByParsedRequest(from, to,
-                label, inHead, inContent, inComment, scopes, commentatorIds));
+       return PNotePostsBuilder.toPojoListFromView(posts)
+               .stream()
+               .distinct()
+               .collect(Collectors.toList());
+    }
+
+    private BooleanExpression predicateParse(PostFilterRequest request) {
+
+        List <BooleanExpression> conditions = new ArrayList<>();
+
+        QViewPostComment model = QViewPostComment.viewPostComment;
+
+        if (request.getFrom() != null)
+            conditions.add(model.postCreatedTimestamp.after(request.getFrom().atStartOfDay()));
+
+        if (request.getTo() != null)
+            conditions.add(model.postCreatedTimestamp.before(request.getTo().atTime(23,59,59)));
+
+        if (request.getLabel() != null) {
+            if (!request.getInComment() && !request.getInContent() && !request.getInHead()) {
+            } else {
+                List<BooleanExpression> labelConditions = new ArrayList<>();
+
+                if (request.getInHead())
+                    labelConditions.add(model.postHeader.containsIgnoreCase(request.getLabel()));
+
+                if (request.getInContent())
+                    labelConditions.add(model.postContent.containsIgnoreCase(request.getLabel()));
+
+                if (request.getInComment())
+                    labelConditions.add(model.commentContent.containsIgnoreCase(request.getLabel()));
+
+                BooleanExpression labelResult = labelConditions.get(0);
+                for (int i = 1; i < labelConditions.size(); ++i) {
+                    labelResult = labelResult.or(labelConditions.get(i));
+                }
+
+                conditions.add(labelResult);
+            }
+        }
+
+        if(!(request.getCommentatorIds() == null || request.getCommentatorIds().isEmpty()))
+            conditions.add(model.commenterUniqueId.in(request.getCommentatorIds()));
+
+        if(!(request.getScopes() == null || request.getScopes().isEmpty()))
+            conditions.add(model.postScopeType.in(request.getScopes()));
+
+        BooleanExpression result = conditions.get(0);
+        for(int i = 1; i < conditions.size(); ++i)
+            result = result.and(conditions.get(i));
+
+        return result;
     }
 }

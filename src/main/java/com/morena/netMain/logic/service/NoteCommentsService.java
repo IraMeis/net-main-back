@@ -2,8 +2,8 @@ package com.morena.netMain.logic.service;
 
 import com.morena.netMain.logic.entity.NoteComments;
 import com.morena.netMain.logic.entity.SysUsers;
-import com.morena.netMain.logic.pojo.PNoteComments;
-import com.morena.netMain.logic.pojo.builder.PNoteCommentsBuilder;
+import com.morena.netMain.logic.model.PNoteComments;
+import com.morena.netMain.logic.model.builder.PNoteCommentsBuilder;
 import com.morena.netMain.logic.repository.NoteCommentsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMak
         comment.setUuid(pojo.getUuid() == null ? UUID.randomUUID() : pojo.getUuid());
         comment.setIsDeleted(pojo.getIsDeleted() != null && pojo.getIsDeleted());
 
-        Optional<SysUsers> user = sysUsersService.getUserById(pojo.getAuthor().getValue());
+        Optional<SysUsers> user = sysUsersService.getUserByIdNotDeleted(pojo.getAuthor().getValue());
         if(user.isEmpty())
             return null;
 
@@ -72,8 +72,8 @@ public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMak
             return null;
 
         if(admin)
-            return PNoteCommentsBuilder.adminCommentBuild(comment.get());
-        return PNoteCommentsBuilder.userCommentBuild(comment.get());
+            return PNoteCommentsBuilder.toAdminPojo(comment.get());
+        return PNoteCommentsBuilder.toUserPojo(comment.get());
     }
 
     public List<PNoteComments> getAllByPostRef (Long postId){
@@ -86,8 +86,8 @@ public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMak
             comments = noteCommentsRepository.findAllByPostRefAndIsDeletedFalseOrderByCreatedTimestamp(postId);
 
         if (admin)
-            return PNoteCommentsBuilder.adminToPojoList(comments);
-        return PNoteCommentsBuilder.userToPojoList(comments);
+            return PNoteCommentsBuilder.toAdminPojoList(comments);
+        return PNoteCommentsBuilder.toUserPojoList(comments);
     }
 
     public boolean createComment(PNoteComments pNoteComments){

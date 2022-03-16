@@ -1,7 +1,7 @@
-package com.morena.netMain.logic.pojo.builder;
+package com.morena.netMain.logic.model.builder;
 
 import com.morena.netMain.logic.entity.NoteComments;
-import com.morena.netMain.logic.pojo.PNoteComments;
+import com.morena.netMain.logic.model.PNoteComments;
 import com.morena.netMain.logic.utils.Pair;
 
 import java.util.Collections;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class PNoteCommentsBuilder {
 
-    public static PNoteComments adminCommentBuild(NoteComments noteComments){
+    public static PNoteComments toAdminPojo(NoteComments noteComments){
 
         return PNoteComments.builder()
 
@@ -32,7 +32,7 @@ public class PNoteCommentsBuilder {
                 .build();
     }
 
-    public static PNoteComments userCommentBuild(NoteComments noteComments){
+    public static PNoteComments toUserPojo(NoteComments noteComments){
 
         return PNoteComments.builder()
 
@@ -50,19 +50,19 @@ public class PNoteCommentsBuilder {
                 .build();
     }
 
-    public static List<PNoteComments> userToPojoList (List<NoteComments> nc){
+    public static List<PNoteComments> toUserPojoList(List<NoteComments> nc){
         if (nc == null)
             return Collections.emptyList();
         return nc.stream()
-                .map(PNoteCommentsBuilder::userCommentBuild)
+                .map(PNoteCommentsBuilder::toUserPojo)
                 .collect(Collectors.toList());
     }
 
-    public static List<PNoteComments> adminToPojoList(List<NoteComments> nc){
+    public static List<PNoteComments> toAdminPojoList(List<NoteComments> nc){
         if (nc == null)
             return Collections.emptyList();
         return nc.stream()
-                .map(PNoteCommentsBuilder::adminCommentBuild)
+                .map(PNoteCommentsBuilder::toAdminPojo)
                 .collect(Collectors.toList());
     }
 }

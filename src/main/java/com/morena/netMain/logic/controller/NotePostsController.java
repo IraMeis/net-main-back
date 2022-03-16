@@ -1,6 +1,7 @@
 package com.morena.netMain.logic.controller;
 
-import com.morena.netMain.logic.pojo.PNotePosts;
+import com.morena.netMain.logic.model.PNotePosts;
+import com.morena.netMain.logic.model.filter.PostFilterRequest;
 import com.morena.netMain.logic.service.NotePostsService;
 import com.morena.netMain.logic.utils.LocalDateConvertor;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -86,7 +88,7 @@ public class NotePostsController {
      * @return
      */
     @GetMapping("/getFilteredPosts")
-    public ResponseEntity<List<PNotePosts>> getFilteredPosts(
+    public ResponseEntity<Collection<PNotePosts>> getFilteredPosts(
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate to,
             @RequestParam(required = false) String label,
@@ -95,8 +97,21 @@ public class NotePostsController {
             @RequestParam(required = false, defaultValue = "true") Boolean inComments,
             @RequestParam(required = false) Long[] scopes,
             @RequestParam(required = false) Long[] commentatorIds){
-        return  ResponseEntity.ok(notePostsService.doPostFilter(
-                from, to, label, inHead, inContent, inComments,
-                scopes == null ? null : List.of(scopes), commentatorIds == null ? null : List.of(commentatorIds)));
+
+        PostFilterRequest request = PostFilterRequest
+                .builder()
+                    .from(from)
+                    .to(to)
+                    .label(label)
+                    .inComment(inComments)
+                    .inContent(inContent)
+                    .inHead(inHead)
+                    .commentatorIds(commentatorIds== null ? null: List.of(commentatorIds))
+                    .scopes(scopes == null ? null: List.of(scopes))
+                .build();
+
+        return ResponseEntity.ok(request.isNullFilter() ?
+                notePostsService.getAll() :
+                notePostsService.getFilteredPosts(request));
     }
 }

@@ -1,6 +1,6 @@
 package com.morena.netMain.logic.controller;
 
-import com.morena.netMain.logic.pojo.PNoteComments;
+import com.morena.netMain.logic.model.PNoteComments;
 import com.morena.netMain.logic.service.NoteCommentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

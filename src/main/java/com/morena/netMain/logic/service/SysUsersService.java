@@ -1,6 +1,7 @@
 package com.morena.netMain.logic.service;
 
 import com.morena.netMain.auth.model.SysTokens;
+import com.morena.netMain.auth.repository.SysTokensRepository;
 import com.morena.netMain.logic.entity.QSysUsers;
 import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.model.dao.PSysUsers;
@@ -24,6 +25,7 @@ public class SysUsersService implements RoleChecker{
     private final AuthService authService;
     private final SysUsersRepository sysUsersRepository;
     private final DictScopesRepository dictScopesRepository;
+    private final SysTokensRepository sysTokensRepository;
 
     @Override
     public boolean isAdmin() {
@@ -91,13 +93,20 @@ public class SysUsersService implements RoleChecker{
     }
 
     public void banUser(Long id){
-        Optional<SysUsers> user = getUserByIdNotDeleted(id);
+        Optional<SysUsers> user = getUserById(id);
         if (user.isEmpty())
             return;
 
         SysTokens token = user.get().getToken();
-        if(token == null)
+
+        if(token == null) {
+            sysTokensRepository.save(new SysTokens(
+                    UUID.randomUUID(),
+                    true,
+                    null,
+                    user.get()));
             return;
+        }
 
         token.setIsDeleted(true);
         sysUsersRepository.save(user.get());

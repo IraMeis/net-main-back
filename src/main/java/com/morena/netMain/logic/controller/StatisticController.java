@@ -17,12 +17,12 @@ public class StatisticController {
     private final StatisticService statisticService;
 
     /**
-     * /api/statistic/getStatistic/{id}
+     * /api/statistic/getUserStatistic/{id}
      * @param id
      * @return
      */
-    @GetMapping("/getStatistic/{id}")
-    public ResponseEntity<PStatistic> getStatistic(@PathVariable Long id){
+    @GetMapping("/getUserStatistic/{id}")
+    public ResponseEntity<PStatistic> getUserStatistic(@PathVariable Long id){
         PStatistic statistic = statisticService.getUserStatistic(id);
         return statistic != null ?
                 ResponseEntity.ok(statistic) :

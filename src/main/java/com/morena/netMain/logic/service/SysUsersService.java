@@ -3,7 +3,7 @@ package com.morena.netMain.logic.service;
 import com.morena.netMain.auth.model.SysTokens;
 import com.morena.netMain.logic.entity.QSysUsers;
 import com.morena.netMain.logic.entity.SysUsers;
-import com.morena.netMain.logic.model.PSysUsers;
+import com.morena.netMain.logic.model.dao.PSysUsers;
 import com.morena.netMain.logic.model.filter.UserFilterRequest;
 import com.morena.netMain.logic.model.builder.PSysUsersBuilder;
 import com.morena.netMain.logic.repository.DictScopesRepository;

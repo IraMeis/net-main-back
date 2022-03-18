@@ -1,6 +1,7 @@
 package com.morena.netMain.logic.repository;
 
 import com.morena.netMain.logic.entity.NoteComments;
+import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.repository.base.BaseModelEntityRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +13,6 @@ public interface NoteCommentsRepository extends BaseModelEntityRepository<NoteCo
     List<NoteComments> findAllByPostRefAndIsDeletedFalseOrderByCreatedTimestamp(Long postRef);
 
     List<NoteComments> findAllByPostRefOrderByCreatedTimestamp(Long postRef);
+
+    Long countByAuthor(SysUsers sysUsers);
 }

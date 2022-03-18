@@ -1,6 +1,7 @@
 package com.morena.netMain.logic.controller;
 
-import com.morena.netMain.logic.model.PSysUsers;
+import com.morena.netMain.logic.model.dao.PStatistic;
+import com.morena.netMain.logic.model.dao.PSysUsers;
 import com.morena.netMain.logic.model.filter.UserFilterRequest;
 import com.morena.netMain.logic.service.SysUsersService;
 import com.morena.netMain.logic.utils.LocalDateConvertor;
@@ -93,11 +94,6 @@ public class SysUsersController {
                 ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/getStatistic/{id}")
-    public ResponseEntity<PSysUsers> getStatistic(@PathVariable Long id){
-        return null;
-    }
-
     /**
      * /api/user/getFilteredUsers
      * @param from
@@ -109,7 +105,7 @@ public class SysUsersController {
      * @param isUser
      * @return
      */
-    @GetMapping("/getFilteredUsers")
+    @GetMapping("/getFilteredUsers")//todo @QuerydslPredicate or filterRequest (+ postMapping) as params
     public ResponseEntity<Collection<PSysUsers>> getFilteredUsers(
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate to,

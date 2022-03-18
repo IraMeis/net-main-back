@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface NotePostsRepository extends BaseModelEntityRepository<NotePosts, Long>, QuerydslPredicateExecutor<NotePosts> {
 
-    //вывод постов на основную страницу
-
     List<NotePosts> findAllByIsDeletedFalseOrderByCreatedTimestampDesc();
 
     List<NotePosts> findAllByOrderByCreatedTimestampDesc();
@@ -22,5 +20,11 @@ public interface NotePostsRepository extends BaseModelEntityRepository<NotePosts
 
     @Query("from NotePosts np where np.scope.code between :from and :to and np.isDeleted=false order by np.createdTimestamp desc")
     List<NotePosts> customFindAllByScopeCodeBetweenAndIsDeletedFalseOrdered(Long from, Long to);
+
+    @Query("from NotePosts pp where pp.uniqueId in (select distinct np.uniqueId " +
+            "from NotePosts np inner join NoteComments nc on np.uniqueId = nc.postRef " +
+            "where nc.author.uniqueId=:commenterId) " +
+            "order by pp.header")
+    List<NotePosts> customFindAllByCommenter(Long commenterId);
 
 }

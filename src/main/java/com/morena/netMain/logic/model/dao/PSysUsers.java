@@ -1,4 +1,4 @@
-package com.morena.netMain.logic.model;
+package com.morena.netMain.logic.model.dao;
 
 import com.morena.netMain.logic.utils.Pair;
 import lombok.*;

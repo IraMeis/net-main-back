@@ -1,6 +1,6 @@
 package com.morena.netMain.logic.controller;
 
-import com.morena.netMain.logic.model.PNotePosts;
+import com.morena.netMain.logic.model.dao.PNotePosts;
 import com.morena.netMain.logic.model.filter.PostFilterRequest;
 import com.morena.netMain.logic.service.NotePostsService;
 import com.morena.netMain.logic.utils.LocalDateConvertor;
@@ -87,7 +87,7 @@ public class NotePostsController {
      * @param inComments
      * @return
      */
-    @GetMapping("/getFilteredPosts")
+    @GetMapping("/getFilteredPosts")//todo @QuerydslPredicate or filterRequest (+ postMapping) as params
     public ResponseEntity<Collection<PNotePosts>> getFilteredPosts(
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(pattern = LocalDateConvertor.dateFormat) LocalDate to,
@@ -106,7 +106,7 @@ public class NotePostsController {
                     .inComment(inComments)
                     .inContent(inContent)
                     .inHead(inHead)
-                    .commentatorIds(commentatorIds== null ? null: List.of(commentatorIds))
+                    .commentatorIds(commentatorIds == null ? null: List.of(commentatorIds))
                     .scopes(scopes == null ? null: List.of(scopes))
                 .build();
 

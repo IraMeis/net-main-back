@@ -1,7 +1,7 @@
 package com.morena.netMain.logic.service;
 
 import com.morena.netMain.logic.entity.*;
-import com.morena.netMain.logic.model.PNotePosts;
+import com.morena.netMain.logic.model.dao.PNotePosts;
 import com.morena.netMain.logic.model.builder.PNotePostsBuilder;
 import com.morena.netMain.logic.model.filter.PostFilterRequest;
 import com.morena.netMain.logic.repository.DictScopesRepository;

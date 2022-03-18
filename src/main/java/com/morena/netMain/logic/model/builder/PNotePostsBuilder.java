@@ -2,7 +2,7 @@ package com.morena.netMain.logic.model.builder;
 
 import com.morena.netMain.logic.entity.NotePosts;
 import com.morena.netMain.logic.entity.ViewPostComment;
-import com.morena.netMain.logic.model.PNotePosts;
+import com.morena.netMain.logic.model.dao.PNotePosts;
 import com.morena.netMain.logic.model.enums.Scope;
 import com.morena.netMain.logic.utils.Pair;
 

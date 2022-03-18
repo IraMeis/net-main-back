@@ -2,7 +2,7 @@ package com.morena.netMain.logic.model.builder;
 
 import com.morena.netMain.logic.entity.DictRoles;
 import com.morena.netMain.logic.entity.SysUsers;
-import com.morena.netMain.logic.model.PSysUsers;
+import com.morena.netMain.logic.model.dao.PSysUsers;
 import com.morena.netMain.logic.utils.Pair;
 import com.sun.istack.NotNull;
 

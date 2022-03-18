@@ -2,7 +2,7 @@ package com.morena.netMain.logic.service;
 
 import com.morena.netMain.logic.entity.NoteComments;
 import com.morena.netMain.logic.entity.SysUsers;
-import com.morena.netMain.logic.model.PNoteComments;
+import com.morena.netMain.logic.model.dao.PNoteComments;
 import com.morena.netMain.logic.model.builder.PNoteCommentsBuilder;
 import com.morena.netMain.logic.repository.NoteCommentsRepository;
 import lombok.RequiredArgsConstructor;

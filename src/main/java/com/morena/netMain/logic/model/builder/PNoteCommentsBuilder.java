@@ -1,7 +1,7 @@
 package com.morena.netMain.logic.model.builder;
 
 import com.morena.netMain.logic.entity.NoteComments;
-import com.morena.netMain.logic.model.PNoteComments;
+import com.morena.netMain.logic.model.dao.PNoteComments;
 import com.morena.netMain.logic.utils.Pair;
 
 import java.util.Collections;

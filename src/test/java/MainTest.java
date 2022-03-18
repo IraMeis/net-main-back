@@ -1,5 +1,5 @@
 import com.morena.netMain.logic.entity.NotePosts;
-import com.morena.netMain.logic.model.PNotePosts;
+import com.morena.netMain.logic.model.dao.PNotePosts;
 import com.morena.netMain.logic.model.builder.PNotePostsBuilder;
 import org.junit.jupiter.api.Disabled;
 

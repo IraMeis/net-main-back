@@ -1,4 +1,4 @@
-package com.morena.netMain.logic.model;
+package com.morena.netMain.logic.model.dao;
 
 import com.morena.netMain.logic.utils.Pair;
 import lombok.*;
@@ -12,26 +12,26 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class PNotePosts {
-
+public class PNoteComments {
     private Long uniqueId;
     private UUID uuid;
     private LocalDateTime createdTimestamp;
     private LocalDateTime modifiedTimestamp;
     private Boolean isDeleted;
 
+    private Pair author;
+    private Long postId;
+    private Boolean isModified;
     private String content;
-    private String header;
-    private Pair scope;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PNotePosts posts= (PNotePosts) o;
+        PNoteComments comments = (PNoteComments) o;
 
-        return Objects.equals(uuid, posts.uuid);
+        return Objects.equals(uuid, comments.uuid);
     }
 
     @Override
@@ -39,3 +39,4 @@ public class PNotePosts {
         return uuid!= null ? uuid.hashCode() : 0;
     }
 }
+

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @AllArgsConstructor
-public class Controller {
+public class TestController {
 
     private final AuthService authService;
     private final SysUsersService sysUsersService;
 
-    @PreAuthorize("hasAuthority('user')")
+    @PreAuthorize("hasAuthority('comment_modifier')")
     @GetMapping("/hello/user")
     public ResponseEntity<String> helloUser() {
         final JwtAuthentication authInfo = authService.getAuthInfo();
@@ -26,7 +26,7 @@ public class Controller {
         return ResponseEntity.ok("Hello user " + authInfo.getPrincipal() + "!");
     }
 
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('system')")
     @GetMapping("/hello/admin")
     public ResponseEntity<String> helloAdmin() {
         final JwtAuthentication authInfo = authService.getAuthInfo();

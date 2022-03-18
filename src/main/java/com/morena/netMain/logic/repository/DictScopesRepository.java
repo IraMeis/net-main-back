@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DictScopesRepository extends BaseModelDictionaryEntityRepository<DictScopes,Long> {
 
-    DictScopes findTopByOrderByCodeDesc();
+    DictScopes findTopByIsDeletedFalseOrderByCodeDesc();
 }

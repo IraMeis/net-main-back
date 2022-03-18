@@ -38,7 +38,7 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
 
     @Override
     public NotePosts updatable(PNotePosts pojo){
-        Optional<NotePosts> post = notePostsRepository.findOneByUniqueIdAndIsDeletedFalse(pojo.getUniqueId());
+        Optional<NotePosts> post = notePostsRepository.findOneByUniqueId(pojo.getUniqueId());
         if(post.isEmpty())
             return null;
 
@@ -56,7 +56,7 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
         if(sysUsers.isEmpty())
             return null;
 
-        Long to = dictScopesRepository.findTopByOrderByCodeDesc().getCode();
+        Long to = dictScopesRepository.findTopByIsDeletedFalseOrderByCodeDesc().getCode();
         Long start = sysUsers.get().getScope().getCode();
 
         List<NotePosts> posts = notePostsRepository.customFindAllByScopeCodeBetweenAndIsDeletedFalseOrdered(start, to);

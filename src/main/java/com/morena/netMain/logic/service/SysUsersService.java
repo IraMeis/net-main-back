@@ -104,11 +104,11 @@ public class SysUsersService implements RoleChecker{
     }
 
     public boolean changeScope(Long id, Long newScope){
-        Optional<SysUsers> user = getUserByIdNotDeleted(id);
+        Optional<SysUsers> user = getUserById(id);
         if (user.isEmpty())
             return false;
 
-        if(newScope<1||newScope > dictScopesRepository.findTopByOrderByCodeDesc().getCode())
+        if(newScope<1||newScope > dictScopesRepository.findTopByIsDeletedFalseOrderByCodeDesc().getCode())
             return false;
 
         user.get().setScope(dictScopesRepository.findOneByCodeAndIsDeletedIsFalse(newScope));

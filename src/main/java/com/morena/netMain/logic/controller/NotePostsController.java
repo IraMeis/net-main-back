@@ -41,6 +41,10 @@ public class NotePostsController {
      */
     @PostMapping("/createPost")
     public ResponseEntity<String> createPost(@RequestBody PNotePosts post){
+
+        if(isNullPost(post))
+            ResponseEntity.badRequest().build();
+
         notePostsService.createPost(post);
         return ResponseEntity.status(HttpStatus.CREATED).body("Created");
     }
@@ -52,9 +56,18 @@ public class NotePostsController {
      */
     @PutMapping("/updatePost")
     public ResponseEntity<String> updatePost(@RequestBody PNotePosts post){
+
+        if(isNullPost(post))
+            ResponseEntity.badRequest().build();
+
         return notePostsService.updatePost(post) ?
                 ResponseEntity.ok("Updated") :
                 ResponseEntity.notFound().build();
+    }
+
+    private static boolean isNullPost(PNotePosts post){
+        return post.getContent() == null || post.getHeader() == null ||
+                post.getScope() == null || post.getScope().getValue() == null;
     }
 
     /**

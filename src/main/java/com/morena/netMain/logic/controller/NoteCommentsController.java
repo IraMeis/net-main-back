@@ -36,6 +36,10 @@ public class NoteCommentsController {
      */
     @PostMapping("/createComment")
     public ResponseEntity<String> createComment(@RequestBody PNoteComments comment){
+
+        if(isNullComment(comment))
+            ResponseEntity.badRequest().build();
+
         return noteCommentsService.createComment(comment) ?
                 ResponseEntity.status(HttpStatus.CREATED).body("Created") :
                 ResponseEntity.badRequest().build();
@@ -48,9 +52,18 @@ public class NoteCommentsController {
      */
     @PutMapping("/updateComment")
     public ResponseEntity<String> updateComment(@RequestBody PNoteComments comment){
+
+        if(isNullComment(comment))
+            ResponseEntity.badRequest().build();
+
         return noteCommentsService.updateComment(comment) ?
                 ResponseEntity.ok("Updated") :
-                ResponseEntity.badRequest().build();
+                ResponseEntity.notFound().build();
+    }
+
+    private static boolean isNullComment(PNoteComments comment){
+        return comment.getContent() == null || comment.getPostId() == null ||
+                comment.getAuthor()==null || comment.getAuthor().getValue()==null;
     }
 
     /**

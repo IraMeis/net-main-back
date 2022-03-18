@@ -56,7 +56,7 @@ public class RegisterService {
                 post_viewer,
                 user_data_viewer,
                 user_data_modifier)));
-        sysUser.setScope(dictScopesRepository.findTopByOrderByCodeDesc());
+        sysUser.setScope(dictScopesRepository.findTopByIsDeletedFalseOrderByCodeDesc());
         return sysUser;
     }
 

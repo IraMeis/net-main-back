@@ -1,6 +1,5 @@
 package com.morena.netMain.logic.service;
 
-import com.morena.netMain.logic.entity.NotePosts;
 import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.model.builder.PStatisticBuilder;
 import com.morena.netMain.logic.model.dao.PStatistic;

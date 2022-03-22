@@ -48,6 +48,17 @@ public class SysUsersController {
     }
 
     /**
+     * /api/user/updateByAdmin
+     * @return
+     */
+    @PutMapping("/updateByAdmin")
+    public ResponseEntity<String> updateByAdmin(@RequestBody PSysUsers user){
+        return sysUsersService.updateByAdmin(user) ?
+                ResponseEntity.ok("Updated") :
+                ResponseEntity.notFound().build();
+    }
+
+    /**
      * /api/user/updateAdditional
      * @param user
      * @return

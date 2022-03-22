@@ -88,6 +88,26 @@ public class SysUsersService implements RoleChecker{
         return true;
     }
 
+    public boolean updateByAdmin(PSysUsers puser){
+
+        Optional<SysUsers> user = getUserById(puser.getUniqueId());
+        if (user.isEmpty())
+            return false;
+
+        if(puser.getScope()!= null && puser.getScope().getValue()!= null &&
+                !Objects.equals(puser.getScope().getValue(), user.get().getScope().getCode()))
+            user.get().setScope(dictScopesRepository
+                    .findOneByCodeAndIsDeletedIsFalse(puser.getScope().getValue()));
+
+        if(puser.getIsDeleted())
+            user.get().setIsDeleted(true);
+
+        if(!puser.getIsTokenAllowed())
+            banUser(user.get());
+
+        return true;
+    }
+
     public void deleteUser(Long id){
         sysUsersRepository.deleteById(id);
     }
@@ -97,19 +117,24 @@ public class SysUsersService implements RoleChecker{
         if (user.isEmpty())
             return;
 
-        SysTokens token = user.get().getToken();
+        banUser(user.get());
+    }
+
+    public void banUser(SysUsers user){
+
+        SysTokens token = user.getToken();
 
         if(token == null) {
             sysTokensRepository.save(new SysTokens(
                     UUID.randomUUID(),
                     true,
                     null,
-                    user.get()));
+                    user));
             return;
         }
 
         token.setIsDeleted(true);
-        sysUsersRepository.save(user.get());
+        sysUsersRepository.save(user);
     }
 
     public boolean changeScope(Long id, Long newScope){

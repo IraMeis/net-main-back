@@ -9,5 +9,5 @@ public class RegisterUser {
 
     private String login;
     private String password;
-    private String about;
+    //private String about;
 }

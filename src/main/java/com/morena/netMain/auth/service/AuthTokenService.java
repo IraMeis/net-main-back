@@ -2,12 +2,15 @@ package com.morena.netMain.auth.service;
 
 import com.morena.netMain.auth.jwt.JwtRequest;
 import com.morena.netMain.auth.jwt.JwtResponse;
+import com.morena.netMain.auth.jwt.LoginResponse;
+import com.morena.netMain.auth.jwt.Message;
 import com.morena.netMain.auth.model.AuthUser;
 import com.morena.netMain.auth.model.SysTokens;
 import com.morena.netMain.auth.repository.SysTokensRepository;
 import com.morena.netMain.logic.entity.SysUsers;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -22,13 +25,13 @@ public class AuthTokenService {
     private final SysTokensRepository sysTokensRepository;
     private final JwtProvider jwtProvider;
 
-    public JwtResponse login(JwtRequest authRequest) {
+    public ResponseEntity<?> login(JwtRequest authRequest) {
         if(authRequest == null)
-            return buildSimpleAnswer("Невалидные данные");
+            return ResponseEntity.badRequest().body(new Message("Невалидные данные"));
 
-        Optional<SysUsers> sysUser = authUserService.getSysUserByLogin(authRequest.getLogin());
+        Optional<SysUsers> sysUser = authUserService.getSysUserByLogin(authRequest.getUsername());
         if(sysUser.isEmpty())
-            return buildSimpleAnswer("Пользователь не найден");
+            return ResponseEntity.badRequest().body(new Message("Пользователь не найден"));
 
         final AuthUser user = AuthUserService.mapToAuthUser(sysUser.get());
 
@@ -43,7 +46,7 @@ public class AuthTokenService {
             else {
                 Optional<SysTokens> bannedtoken = sysTokensRepository.findByOwnerAndIsDeletedTrue(sysUser.get());
                 if(bannedtoken.isPresent())
-                    return buildSimpleAnswer("Пользователь забанен");
+                    return ResponseEntity.badRequest().body(new Message("Пользователь забанен"));
 
                 sysTokensRepository.save(new SysTokens(
                         UUID.randomUUID(),
@@ -53,9 +56,9 @@ public class AuthTokenService {
             }
             sysUser.get().setIsActive(true);
             authUserService.saveSysUser(sysUser.get());
-            return new JwtResponse(accessToken, refreshToken);
+            return ResponseEntity.ok(new LoginResponse(user, accessToken, refreshToken));
         } else {
-            return buildSimpleAnswer("Неправильный пароль");
+            return ResponseEntity.badRequest().body(new Message("Неправильный пароль или логин"));
         }
     }
 

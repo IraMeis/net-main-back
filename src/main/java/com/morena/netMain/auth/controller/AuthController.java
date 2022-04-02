@@ -6,11 +6,9 @@ import com.morena.netMain.auth.jwt.JwtResponse;
 import com.morena.netMain.auth.service.AuthTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -24,9 +22,8 @@ public class AuthController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authRequest) {
-        final JwtResponse token = authTokenService.login(authRequest);
-        return ResponseEntity.ok(token);
+    public ResponseEntity<?> login(@RequestBody JwtRequest authRequest) {
+        return authTokenService.login(authRequest);
     }
 
     /**

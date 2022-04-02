@@ -27,4 +27,5 @@ public class NotePosts extends BaseModelEntity {
     @JoinColumn(name = "scope_type", referencedColumnName = "code")
     private DictScopes scope;
 
+    //todo hard delete comments while hard deleting posts - add oneToMany
 }

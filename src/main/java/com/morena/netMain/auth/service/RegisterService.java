@@ -46,7 +46,7 @@ public class RegisterService {
 
         sysUser.setLogin(registerUser.getLogin());
         sysUser.setPassword(registerUser.getPassword());
-        sysUser.setAbout(registerUser.getAbout());
+      //  sysUser.setAbout(registerUser.getAbout());
 
         sysUser.setIsUser(true);
         sysUser.setIsActive(false);

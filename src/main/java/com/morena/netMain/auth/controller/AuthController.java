@@ -23,7 +23,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody JwtRequest authRequest) {
-        return authTokenService.login(authRequest);
+        return authTokenService.login(authRequest).get();
     }
 
     /**

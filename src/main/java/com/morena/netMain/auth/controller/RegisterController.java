@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/register")
+@RequestMapping("/api/auth/register")
 @RequiredArgsConstructor
 public class RegisterController {
 
     private final RegisterService registerService;
 
     /**
-     * /api/register
+     * /api/auth/register
      * @param user
      * @return
      */

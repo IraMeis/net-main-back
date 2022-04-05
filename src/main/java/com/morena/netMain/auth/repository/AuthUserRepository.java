@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface AuthUserRepository extends BaseModelEntityRepository<SysUsers, Long> {
 
     Optional<SysUsers> findByLoginAndIsDeletedFalse(String login);
+    Boolean existsByLogin(String login);
 }

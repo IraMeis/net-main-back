@@ -37,7 +37,7 @@ public class RegisterService {
 
     public SysUsers mapToSysUser(RegisterUser registerUser){
 
-        if(authUserRepository.findByLoginAndIsDeletedFalse(registerUser.getLogin()).isPresent())
+        if(authUserRepository.existsByLogin(registerUser.getLogin()))
             return null;
 
         SysUsers sysUser = new SysUsers();

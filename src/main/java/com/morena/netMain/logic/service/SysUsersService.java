@@ -90,7 +90,7 @@ public class SysUsersService implements RoleChecker{
 
     public boolean updateByAdmin(PSysUsers puser){
 
-        Optional<SysUsers> user = getUserById(puser.getUniqueId());
+        Optional<SysUsers> user = getUserById(puser.getId());
         if (user.isEmpty())
             return false;
 

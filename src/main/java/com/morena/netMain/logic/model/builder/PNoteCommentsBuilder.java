@@ -15,7 +15,7 @@ public class PNoteCommentsBuilder {
 
         return PNoteComments.builder()
 
-                .uniqueId(noteComments.getUniqueId())
+                .id(noteComments.getUniqueId())
                 .uuid(noteComments.getUuid())
                 .createdTimestamp(noteComments.getCreatedTimestamp())
                 .modifiedTimestamp(noteComments.getModifiedTimestamp())
@@ -36,7 +36,7 @@ public class PNoteCommentsBuilder {
 
         return PNoteComments.builder()
 
-                .uniqueId(noteComments.getUniqueId())
+                .id(noteComments.getUniqueId())
                 .createdTimestamp(noteComments.getCreatedTimestamp())
 
                 .author(Pair.builder()

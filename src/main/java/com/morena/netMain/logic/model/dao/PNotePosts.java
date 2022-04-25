@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 public class PNotePosts {
 
-    private Long uniqueId;
+    private Long id;
     private UUID uuid;
     private LocalDateTime createdTimestamp;
     private LocalDateTime modifiedTimestamp;

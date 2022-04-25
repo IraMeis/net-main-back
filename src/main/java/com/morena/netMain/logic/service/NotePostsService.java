@@ -38,7 +38,7 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
 
     @Override
     public NotePosts updatable(PNotePosts pojo){
-        Optional<NotePosts> post = notePostsRepository.findOneByUniqueId(pojo.getUniqueId());
+        Optional<NotePosts> post = notePostsRepository.findOneByUniqueId(pojo.getId());
         if(post.isEmpty())
             return null;
 

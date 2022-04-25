@@ -15,7 +15,7 @@ public class PNotePostsBuilder {
 
         return PNotePosts.builder()
 
-                .uniqueId(notePosts.getUniqueId())
+                .id(notePosts.getUniqueId())
                 .uuid(notePosts.getUuid())
                 .createdTimestamp(notePosts.getCreatedTimestamp())
                 .modifiedTimestamp(notePosts.getModifiedTimestamp())
@@ -35,7 +35,7 @@ public class PNotePostsBuilder {
 
         return PNotePosts.builder()
 
-                .uniqueId(viewPostComment.getPostUniqueId())
+                .id(viewPostComment.getPostUniqueId())
                 .uuid(viewPostComment.getPostUuid())
                 .createdTimestamp(viewPostComment.getPostCreatedTimestamp())
                 .modifiedTimestamp(viewPostComment.getPostModifiedTimestamp())

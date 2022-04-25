@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @Builder
 public class PNoteComments {
-    private Long uniqueId;
+    private Long id;
     private UUID uuid;
     private LocalDateTime createdTimestamp;
     private LocalDateTime modifiedTimestamp;

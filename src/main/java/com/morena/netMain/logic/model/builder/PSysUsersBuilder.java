@@ -17,7 +17,7 @@ public class PSysUsersBuilder {
 
         return PSysUsers.builder()
 
-                .uniqueId(sysUsers.getUniqueId())
+                .id(sysUsers.getUniqueId())
                 .uuid(sysUsers.getUuid())
                 .createdTimestamp(sysUsers.getCreatedTimestamp())
                 .modifiedTimestamp(sysUsers.getModifiedTimestamp())
@@ -42,7 +42,7 @@ public class PSysUsersBuilder {
 
         return PSysUsers.builder()
 
-                .uniqueId(sysUsers.getUniqueId())
+                .id(sysUsers.getUniqueId())
                 .createdTimestamp(sysUsers.getCreatedTimestamp())
 
                 .about(sysUsers.getAbout())

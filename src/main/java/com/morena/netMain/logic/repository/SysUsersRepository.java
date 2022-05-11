@@ -2,6 +2,7 @@ package com.morena.netMain.logic.repository;
 
 import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.repository.base.BaseModelEntityRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
@@ -23,4 +24,9 @@ public interface SysUsersRepository extends BaseModelEntityRepository<SysUsers, 
 
     @Query("select min(u.createdTimestamp) from SysUsers u")
     LocalDateTime findMinDate();
+
+    @Override
+    @Modifying
+    @Query("update SysUsers nc set nc.isDeleted=true where nc.uniqueId=:id")
+    void deleteById(Long id);
 }

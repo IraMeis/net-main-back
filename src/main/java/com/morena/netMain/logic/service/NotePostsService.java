@@ -42,11 +42,19 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
         if(post.isEmpty())
             return null;
 
+        if(pojo.getScope()!=null && pojo.getScope().getValue()!=null)
         post.get().setScope(dictScopesRepository.findOneByCodeAndIsDeletedIsFalse(
                 pojo.getScope().getValue()));
-        post.get().setIsDeleted(pojo.getIsDeleted() != null && pojo.getIsDeleted());
+
+        if(pojo.getIsDeleted()!=null)
+        post.get().setIsDeleted(pojo.getIsDeleted());
+
+        if(pojo.getContent()!=null)
         post.get().setContent(pojo.getContent());
+
+        if(pojo.getHeader()!=null)
         post.get().setHeader(pojo.getHeader());
+
         return post.get();
     }
 

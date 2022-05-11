@@ -23,11 +23,6 @@ public interface BaseModelEntityRepository<T extends BaseModelEntity, ID> extend
 
     Optional<T> findOneByUuidAndIsDeletedFalse(UUID uuid);
 
-    @Override
-    @Modifying
-    @Query("update NotePosts np set np.isDeleted=true where np.uniqueId=:id")
-    void deleteById(ID id);
-
 //    @Override
 //    @RestResource(exported = false)
 //    void delete(@Param("entity") T entity);

@@ -54,8 +54,10 @@ public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMak
         if(comment.isEmpty())
             return null;
 
-        comment.get().setContent(pojo.getContent());
-        comment.get().setIsModified(true);
+        if(pojo.getContent()!=null) {
+            comment.get().setContent(pojo.getContent());
+            comment.get().setIsModified(true);
+        }
         return comment.get();
     }
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface DictScopesRepository extends BaseModelDictionaryEntityRepository<DictScopes, Long> {
 
     DictScopes findTopByIsDeletedFalseOrderByCodeDesc();
-
+    DictScopes findTopByIsDeletedFalseOrderByCodeAsc();
     @Override
     @Modifying
     @Query("update DictScopes nc set nc.isDeleted=true where nc.uniqueId=:id")

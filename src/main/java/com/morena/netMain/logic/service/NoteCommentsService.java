@@ -34,17 +34,20 @@ public class NoteCommentsService implements RoleChecker, CreateOrUpdateEntityMak
     @Override
     public NoteComments creatable(PNoteComments pojo) {
         NoteComments comment = new NoteComments();
-        comment.setUuid(pojo.getUuid() == null ? UUID.randomUUID() : pojo.getUuid());
-        comment.setIsDeleted(pojo.getIsDeleted() != null && pojo.getIsDeleted());
-
-        Optional<SysUsers> user = sysUsersService.getUserByIdNotDeleted(pojo.getAuthor().getValue());
-        if(user.isEmpty())
+        Optional<SysUsers> user;
+        if(pojo.getAuthor() != null && pojo.getAuthor().getValue() != null)
+            user = sysUsersService.getUserByIdNotDeleted(pojo.getAuthor().getValue());
+        else
+            user = sysUsersService.getCurrentUser();
+        if(user.isEmpty() || pojo.getPostId() == null)
             return null;
 
+        comment.setUuid(pojo.getUuid() == null ? UUID.randomUUID() : pojo.getUuid());
+        comment.setIsDeleted(pojo.getIsDeleted() != null && pojo.getIsDeleted());
         comment.setAuthor(user.get());
-        comment.setContent(pojo.getContent());
-        comment.setIsModified(false);
         comment.setPostRef(pojo.getPostId());
+        comment.setContent(pojo.getContent() == null ? "" : pojo.getContent());
+        comment.setIsModified(false);
         return comment;
     }
 

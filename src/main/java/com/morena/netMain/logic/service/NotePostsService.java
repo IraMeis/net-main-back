@@ -30,9 +30,15 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
         post.setUuid(pojo.getUuid() == null ? UUID.randomUUID() : pojo.getUuid());
         post.setIsDeleted(pojo.getIsDeleted() != null && pojo.getIsDeleted());
 
-        post.setContent(pojo.getContent());
-        post.setHeader(pojo.getHeader());
-        post.setScope(dictScopesRepository.findOneByCodeAndIsDeletedIsFalse(pojo.getScope().getValue()));
+        post.setContent(pojo.getContent() == null ? "" : pojo.getContent());
+        post.setHeader(pojo.getHeader() == null ? "" : pojo.getHeader());
+
+        if (pojo.getScope()!= null && pojo.getScope().getValue() != null)
+            post.setScope(dictScopesRepository
+                .findOneByCodeAndIsDeletedIsFalse(pojo.getScope().getValue()));
+        else
+            post.setScope(dictScopesRepository.findTopByIsDeletedFalseOrderByCodeAsc());
+
         return post;
     }
 

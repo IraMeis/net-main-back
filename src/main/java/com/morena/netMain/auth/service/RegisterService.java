@@ -37,14 +37,14 @@ public class RegisterService {
 
     public SysUsers mapToSysUser(RegisterUser registerUser){
 
-        if(authUserRepository.existsByLogin(registerUser.getLogin()))
+        if(authUserRepository.existsByLogin(registerUser.getUsername()))
             return null;
 
         SysUsers sysUser = new SysUsers();
         sysUser.setUuid(UUID.randomUUID());
         sysUser.setIsDeleted(false);
 
-        sysUser.setLogin(registerUser.getLogin());
+        sysUser.setLogin(registerUser.getUsername());
         sysUser.setPassword(registerUser.getPassword());
       //  sysUser.setAbout(registerUser.getAbout());
 

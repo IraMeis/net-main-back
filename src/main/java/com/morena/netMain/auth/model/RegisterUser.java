@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class RegisterUser {
 
-    private String login;
+    private String username;
     private String password;
     //private String about;
 }

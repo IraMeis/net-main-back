@@ -19,11 +19,12 @@ import java.util.UUID;
 @Setter
 public class ViewPostComment implements Serializable {
 
-    @Id
     private Long commentUniqueId;
 
     private UUID commentUuid;
 
+    //todo fix it later
+    @Id
     private Long postUniqueId;
 
     private UUID postUuid;
@@ -51,9 +52,12 @@ public class ViewPostComment implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ViewPostComment viewPostComment= (ViewPostComment) o;
+        ViewPostComment viewPostComment = (ViewPostComment) o;
 
-        return Objects.equals(commentUuid, viewPostComment.commentUuid);
+        if (this.commentUuid != null && viewPostComment.commentUuid != null)
+            return Objects.equals(commentUuid, viewPostComment.commentUuid);
+        else
+            return this.commentUuid == null && viewPostComment.commentUuid == null;
     }
 
     @Override

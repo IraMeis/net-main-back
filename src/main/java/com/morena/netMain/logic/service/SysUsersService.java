@@ -180,7 +180,7 @@ public class SysUsersService implements RoleChecker{
                 conditions.add(QSysUsers.sysUsers.isDeleted.isTrue());
             else
                 conditions.add(QSysUsers.sysUsers.isDeleted.isFalse());
-
+//
         if (request.getIsActive() != null && request.getIsActive())
             conditions.add(QSysUsers.sysUsers.isActive.isTrue());
 

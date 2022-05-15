@@ -414,26 +414,25 @@ comment on column net_runs.content is 'Объект evaluation';
 
 comment on column net_runs.net_ref is 'Ссылка на модель';
 
-create view post_and_comment(post_unique_id, post_uuid,
-                             post_header, post_content, post_scope_type, post_created_timestamp, post_modified_timestamp,
-                             post_is_deleted, commenter_unique_id, commenter_login, comment_content,
-                             comment_unique_id, comment_uuid) as
-select distinct
-    np.unique_id,
-    np.uuid,
-    np.header,
-    np.content,
-    np.scope_type,
-    np.created_timestamp,
-    np.modified_timestamp,
-    np.is_deleted,
-    nc.author_ref,
-    su.login,
-    nc.content,
-    nc.unique_id,
-    nc.uuid
-
-from
-    note_posts np inner join note_comments nc on np.unique_id = nc.post_ref
-                  inner join sys_users su on nc.author_ref = su.unique_id
-order by np.created_timestamp;
+create view post_and_comment
+            (post_unique_id, post_uuid, post_header, post_content, post_scope_type, post_created_timestamp,
+             post_modified_timestamp, post_is_deleted, commenter_unique_id, commenter_login, comment_content,
+             comment_unique_id, comment_uuid)
+as
+SELECT DISTINCT np.unique_id          AS post_unique_id,
+                np.uuid               AS post_uuid,
+                np.header             AS post_header,
+                np.content            AS post_content,
+                np.scope_type         AS post_scope_type,
+                np.created_timestamp  AS post_created_timestamp,
+                np.modified_timestamp AS post_modified_timestamp,
+                np.is_deleted         AS post_is_deleted,
+                nc.author_ref         AS commenter_unique_id,
+                su.login              AS commenter_login,
+                nc.content            AS comment_content,
+                nc.unique_id          AS comment_unique_id,
+                nc.uuid               AS comment_uuid
+FROM note_posts np
+         LEFT JOIN note_comments nc ON np.unique_id = nc.post_ref
+         LEFT JOIN sys_users su ON nc.author_ref = su.unique_id
+ORDER BY np.created_timestamp;

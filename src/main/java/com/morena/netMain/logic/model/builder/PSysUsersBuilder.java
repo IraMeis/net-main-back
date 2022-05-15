@@ -3,6 +3,7 @@ package com.morena.netMain.logic.model.builder;
 import com.morena.netMain.logic.entity.DictRoles;
 import com.morena.netMain.logic.entity.SysUsers;
 import com.morena.netMain.logic.model.dao.PSysUsers;
+import com.morena.netMain.logic.utils.LocalDateTimeConvertor;
 import com.morena.netMain.logic.utils.Pair;
 import com.sun.istack.NotNull;
 
@@ -13,14 +14,16 @@ import java.util.stream.Collectors;
 
 public class PSysUsersBuilder {
 
+    private static LocalDateTimeConvertor convertor = new LocalDateTimeConvertor();
+
     public static PSysUsers toAdminPojo(SysUsers sysUsers){
 
         return PSysUsers.builder()
 
                 .id(sysUsers.getUniqueId())
                 .uuid(sysUsers.getUuid())
-                .createdTimestamp(sysUsers.getCreatedTimestamp())
-                .modifiedTimestamp(sysUsers.getModifiedTimestamp())
+                .createdTimestamp(convertor.convert(sysUsers.getCreatedTimestamp()))
+                .modifiedTimestamp(convertor.convert(sysUsers.getModifiedTimestamp()))
                 .isDeleted(sysUsers.getIsDeleted())
 
                 .about(sysUsers.getAbout())
@@ -43,7 +46,7 @@ public class PSysUsersBuilder {
         return PSysUsers.builder()
 
                 .id(sysUsers.getUniqueId())
-                .createdTimestamp(sysUsers.getCreatedTimestamp())
+                .createdTimestamp(convertor.convert(sysUsers.getCreatedTimestamp()))
 
                 .about(sysUsers.getAbout())
                 .login(sysUsers.getLogin())

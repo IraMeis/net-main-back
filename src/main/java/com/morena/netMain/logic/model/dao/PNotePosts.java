@@ -3,7 +3,6 @@ package com.morena.netMain.logic.model.dao;
 import com.morena.netMain.logic.utils.Pair;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,8 +15,8 @@ public class PNotePosts {
 
     private Long id;
     private UUID uuid;
-    private LocalDateTime createdTimestamp;
-    private LocalDateTime modifiedTimestamp;
+    private String createdTimestamp;
+    private String modifiedTimestamp;
     private Boolean isDeleted;
 
     private String content;

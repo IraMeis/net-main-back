@@ -2,6 +2,7 @@ package com.morena.netMain.logic.model.builder;
 
 import com.morena.netMain.logic.entity.NoteComments;
 import com.morena.netMain.logic.model.dao.PNoteComments;
+import com.morena.netMain.logic.utils.LocalDateTimeConvertor;
 import com.morena.netMain.logic.utils.Pair;
 
 import java.util.Collections;
@@ -11,14 +12,16 @@ import java.util.stream.Collectors;
 
 public class PNoteCommentsBuilder {
 
+    private static LocalDateTimeConvertor convertor = new LocalDateTimeConvertor();
+
     public static PNoteComments toAdminPojo(NoteComments noteComments){
 
         return PNoteComments.builder()
 
                 .id(noteComments.getUniqueId())
                 .uuid(noteComments.getUuid())
-                .createdTimestamp(noteComments.getCreatedTimestamp())
-                .modifiedTimestamp(noteComments.getModifiedTimestamp())
+                .createdTimestamp(convertor.convert(noteComments.getCreatedTimestamp()))
+                .modifiedTimestamp(convertor.convert(noteComments.getModifiedTimestamp()))
                 .isDeleted(noteComments.getIsDeleted())
 
                 .author(Pair.builder()
@@ -37,7 +40,8 @@ public class PNoteCommentsBuilder {
         return PNoteComments.builder()
 
                 .id(noteComments.getUniqueId())
-                .createdTimestamp(noteComments.getCreatedTimestamp())
+                .createdTimestamp(convertor.convert(noteComments.getCreatedTimestamp()))
+                .modifiedTimestamp(convertor.convert(noteComments.getModifiedTimestamp()))
 
                 .author(Pair.builder()
                         .value(noteComments.getAuthor().getUniqueId())

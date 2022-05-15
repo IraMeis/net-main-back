@@ -4,6 +4,7 @@ import com.morena.netMain.logic.entity.NotePosts;
 import com.morena.netMain.logic.entity.ViewPostComment;
 import com.morena.netMain.logic.model.dao.PNotePosts;
 import com.morena.netMain.logic.model.enums.Scope;
+import com.morena.netMain.logic.utils.LocalDateTimeConvertor;
 import com.morena.netMain.logic.utils.Pair;
 
 import java.util.Collections;
@@ -11,14 +12,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PNotePostsBuilder {
+
+    private static LocalDateTimeConvertor convertor = new LocalDateTimeConvertor();
+
     public static PNotePosts toPojo(NotePosts notePosts){
 
         return PNotePosts.builder()
 
                 .id(notePosts.getUniqueId())
                 .uuid(notePosts.getUuid())
-                .createdTimestamp(notePosts.getCreatedTimestamp())
-                .modifiedTimestamp(notePosts.getModifiedTimestamp())
+                .createdTimestamp(convertor.convert(notePosts.getCreatedTimestamp()))
+                .modifiedTimestamp(convertor.convert(notePosts.getModifiedTimestamp()))
                 .isDeleted(notePosts.getIsDeleted())
 
                 .header(notePosts.getHeader())
@@ -37,8 +41,8 @@ public class PNotePostsBuilder {
 
                 .id(viewPostComment.getPostUniqueId())
                 .uuid(viewPostComment.getPostUuid())
-                .createdTimestamp(viewPostComment.getPostCreatedTimestamp())
-                .modifiedTimestamp(viewPostComment.getPostModifiedTimestamp())
+                .createdTimestamp(convertor.convert(viewPostComment.getPostCreatedTimestamp()))
+                .modifiedTimestamp(convertor.convert(viewPostComment.getPostModifiedTimestamp()))
                 .isDeleted(viewPostComment.getPostIsDeleted())
 
                 .header(viewPostComment.getPostHeader())

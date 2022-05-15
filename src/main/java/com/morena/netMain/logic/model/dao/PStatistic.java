@@ -15,6 +15,7 @@ import java.util.UUID;
 public class PStatistic {
 
     private Long userId;
+    private String username;
     private UUID userUuid;
     private Boolean isDeleted;
     private Boolean isBanned;

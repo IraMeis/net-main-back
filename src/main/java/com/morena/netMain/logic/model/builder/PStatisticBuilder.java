@@ -11,6 +11,7 @@ public class PStatisticBuilder {
     public static PStatistic toPojo(SysUsers user, Long commentsCount, List<Pair> posts){
         return PStatistic.builder()
                 .userId(user.getUniqueId())
+                .username(user.getLogin())
                 .userUuid(user.getUuid())
                 .isBanned(user.getToken() != null && user.getToken().getIsDeleted())
                 .isActive(user.getIsActive())

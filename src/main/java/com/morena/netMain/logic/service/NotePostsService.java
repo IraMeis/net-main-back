@@ -119,6 +119,15 @@ public class NotePostsService implements CreateOrUpdateEntityMaker<NotePosts,PNo
         notePostsRepository.deleteById(id);
     }
 
+    public boolean undeletePost(Long id){
+        Optional<NotePosts> post = notePostsRepository.findOneByUniqueId(id);
+        if(post.isEmpty())
+            return false;
+        post.get().setIsDeleted(false);
+        notePostsRepository.save(post.get());
+        return true;
+    }
+
     public Collection<PNotePosts> getFilteredPosts(PostFilterRequest postFilterRequest){
        List<ViewPostComment> posts = new ArrayList<>();
        viewPostCommentRepository.findAll(predicateParse(postFilterRequest))

@@ -81,6 +81,17 @@ public class NotePostsController {
         notePostsService.deletePost(id);
         return ResponseEntity.ok("Deleted");
     }
+    /**
+     * /api/post/undeletePost/{id}
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/undeletePost/{id}")
+    public ResponseEntity<String> undeletePost(@PathVariable Long id){
+        return notePostsService.undeletePost(id) ?
+            ResponseEntity.ok("Undeleted") :
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 
     /**
      * /api/post/getContent

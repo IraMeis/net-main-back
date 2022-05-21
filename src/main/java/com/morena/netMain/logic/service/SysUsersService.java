@@ -99,11 +99,11 @@ public class SysUsersService implements RoleChecker{
             user.get().setScope(dictScopesRepository
                     .findOneByCodeAndIsDeletedIsFalse(puser.getScope().getValue()));
 
-        if(puser.getIsDeleted())
-            user.get().setIsDeleted(true);
+        if(puser.getIsDeleted() != null)
+            user.get().setIsDeleted(puser.getIsDeleted());
 
-        if(!puser.getIsTokenAllowed())
-            banUser(user.get());
+        if(puser.getIsTokenAllowed() != null)
+            banUser(user.get(), !puser.getIsTokenAllowed());
 
         return true;
     }
@@ -112,28 +112,38 @@ public class SysUsersService implements RoleChecker{
         sysUsersRepository.deleteById(id);
     }
 
-    public void banUser(Long id){
-        Optional<SysUsers> user = getUserById(id);
-        if (user.isEmpty())
-            return;
-
-        banUser(user.get());
+    public boolean undeleteUser(Long id){
+        Optional<SysUsers> user = sysUsersRepository.findOneByUniqueId(id);
+        if(user.isEmpty())
+            return false;
+        user.get().setIsDeleted(false);
+        sysUsersRepository.save(user.get());
+        return true;
     }
 
-    public void banUser(SysUsers user){
+    public boolean banUser(Long id, Boolean isBanned){
+        Optional<SysUsers> user = getUserById(id);
+        if (user.isEmpty())
+            return false;
+
+        banUser(user.get(), isBanned);
+        return true;
+    }
+
+    public void banUser(SysUsers user, Boolean isBanned){
 
         SysTokens token = user.getToken();
 
         if(token == null) {
             sysTokensRepository.save(new SysTokens(
                     UUID.randomUUID(),
-                    true,
+                    isBanned,
                     null,
                     user));
             return;
         }
 
-        token.setIsDeleted(true);
+        token.setIsDeleted(isBanned);
         sysUsersRepository.save(user);
     }
 
@@ -142,7 +152,8 @@ public class SysUsersService implements RoleChecker{
         if (user.isEmpty())
             return false;
 
-        if(newScope<1||newScope > dictScopesRepository.findTopByIsDeletedFalseOrderByCodeDesc().getCode())
+        if(newScope < 1 ||
+                newScope > dictScopesRepository.findTopByIsDeletedFalseOrderByCodeDesc().getCode())
             return false;
 
         user.get().setScope(dictScopesRepository.findOneByCodeAndIsDeletedIsFalse(newScope));

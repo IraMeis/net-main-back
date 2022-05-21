@@ -82,13 +82,35 @@ public class SysUsersController {
     }
 
     /**
+     * /api/user/undeleteUser/{id}
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/undeleteUser/{id}")
+    public ResponseEntity<String> undeleteUser(@PathVariable Long id){
+        sysUsersService.undeleteUser(id);
+        return ResponseEntity.ok("Undeleted");
+    }
+
+    /**
      * /api/user/banUser/{id}
      * @param id
      * @return
      */
     @PutMapping("/banUser/{id}")
     public ResponseEntity<String> banUser(@PathVariable Long id){
-        sysUsersService.banUser(id);
+        sysUsersService.banUser(id, true);
+        return ResponseEntity.ok("Banned");
+    }
+
+    /**
+     * /api/user/unbanUser/{id}
+     * @param id
+     * @return
+     */
+    @PutMapping("/unbanUser/{id}")
+    public ResponseEntity<String> unbanUser(@PathVariable Long id){
+        sysUsersService.banUser(id, false);
         return ResponseEntity.ok("Banned");
     }
 

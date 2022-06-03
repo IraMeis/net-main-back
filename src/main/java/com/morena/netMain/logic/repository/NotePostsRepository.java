@@ -4,13 +4,12 @@ import com.morena.netMain.logic.entity.NotePosts;
 import com.morena.netMain.logic.repository.base.BaseModelEntityRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface NotePostsRepository extends BaseModelEntityRepository<NotePosts, Long>, QuerydslPredicateExecutor<NotePosts> {
+public interface NotePostsRepository extends BaseModelEntityRepository<NotePosts, Long> {
 
     List<NotePosts> findAllByIsDeletedFalseOrderByCreatedTimestampDesc();
 
